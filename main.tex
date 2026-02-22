@@ -1,0 +1,103 @@
+\documentclass[11pt,final,hidelinks]{article}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,
+    spacing=true,factor=1100,stretch=10,shrink=10]{microtype}
+\microtypecontext{spacing=nonfrench}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\graphicspath{{img/}}
+\usepackage[noend]{algorithm2e}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{commath}
+\usepackage{appendix}
+\renewcommand\appendixtocname{Appendices}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+%\usepackage[intoc,english]{nomencl}
+%\makenomenclature
+\usepackage{pgfplots}
+\usepackage{tabu}
+\usepackage{tikz}
+\usepackage{tikzscale}
+\usepackage[square,numbers]{natbib}
+\bibliographystyle{plain}
+\usepackage{siunitx}
+\numberwithin{equation}{section}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+\pgfplotsset{compat=newest}
+
+\usepackage[fancy,section]{alex}
+
+\hypersetup{
+    pdftitle={Bernoulli sets and their corresponding random binary classification measures.},
+    pdfauthor={Alexander Towell},               % author
+    pdfsubject={computer science},              % subject of the %document
+    pdfkeywords={
+        probabilistic data structure,
+        abstract data type,
+        approximate set,
+        bloom filter,
+        perfect hash function,
+        perfect hash filter},                   % keywords
+    colorlinks=true,                            % false: boxed links;
+    linkcolor=magenta,
+    citecolor=green,                            % color of links to
+    filecolor=blue,                             % color of file links
+    urlcolor=green                              % color of external
+}
+
+\title
+{
+    Bernoulli sets: a model for modeling sets with random errors\\
+    \large and corresponding random binary classification measures.
+}
+\author
+{
+    Alexander Towell\\
+    \texttt{atowell@siue.edu}
+}
+\date{}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+We introduce the \emph{Bernoulli set model}, a compositionally closed probabilistic framework for \emph{random approximate sets}---sets that approximate an objective set with independent, element-wise errors parameterized by false positive and false negative rates.
+The central property of the model is \emph{closure}: every set-theoretic operation (complement, union, intersection, difference) on Bernoulli sets yields a Bernoulli set whose error rates are computable from the operands, and this closure extends to higher-order compositions.
+From two axioms---element-wise independence and conditional independence of error rates---we derive the probability distributions of all standard binary classification measures (precision, recall, etc.), the joint entropy of error counts, and conditions under which approximate sets form commutative monoids.
+The framework unifies the analysis of probabilistic data structures such as Bloom filters and perfect hash filters: any implementation satisfying the Bernoulli axioms inherits the full theory as an abstract data type.
+We demonstrate this compositionality through an application to encrypted Boolean search, where showing that result sets are Bernoulli sets immediately yields all performance guarantees.
+\end{abstract}
+
+\microtypesetup{protrusion=false}
+\tableofcontents
+\microtypesetup{protrusion=true}
+
+\input{sections/intro}
+\input{sections/algebra_of_sets}
+\input{sections/bernoulli_model}
+\input{sections/distributions}
+\input{sections/set_theory}
+\input{sections/relational}
+\input{sections/uncertain_rates}
+\input{sections/adt}
+\input{sections/entropy}
+\input{sections/algebraic_structure}
+\input{sections/bool_search}
+
+\appendices
+\input{sections/appendix}
+
+\bibliography{references}
+
+\end{document}

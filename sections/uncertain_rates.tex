@@ -1,0 +1,109 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Interval -- uncertainty
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Uncertain rates}
+\label{sec:intervals}
+We may not be certain about the \emph{expected} false positive and true positive rates, i.e., we may only have the joint distribution of $\tilde{A}$, $\alpha$, and $\beta$.
+
+A relatively easy case to analyze is the positive-negative (second-order) random approximate set model.
+Suppose we are interested in the distribution of $\tilde{A}$ given $R$ has $p$ positives and $n$ negatives.
+Since we are primarily interested in the distribution of false positives and true positives (or their corresponding rates), we consider the related random tuple $\Tuple{\FP_n, \TP_p, \TPR, \alpha}$ which, assuming $\alpha$ and $\TPR$ are independent, has a joint probability density function given by
+\begin{equation}
+	f_{\TP_p, \FP_n,\TPR,\alpha}(t,f,\tprate,\fprate) = f_{\TP_p,\TPR}(t, \tprate) f_{\FP_n,\alpha}(f,\fprate)
+\end{equation}
+where
+\begin{align}
+	f_{\TP_p,\TPR}(t,\tprate) &= f_{\TP_p | \TPR}(t | \tprate) f_{\TPR}(\tprate),\\
+	f_{\FP_n,\alpha}(f,\fprate) &= f_{\FP_p | \alpha}(f | \fprate) f_{\alpha}(\fprate).
+\end{align}
+
+When we \emph{marginalize} over the true positives, we get the result
+\begin{equation}
+\begin{split}
+	f_{\TP_p}(t) &= \int_{0}^{1} f_{\TP_p | \TPR}(t | \tprate) f_{\TPR}(\tprate) \dif \tprate\\
+	             &= \int_{0}^{1} \binom{p}{t} \tprate^{t}(1-\tprate)^{p-t} f_{\TPR}(\tprate) \dif \tprate.
+\end{split}
+\end{equation}
+
+If all the probability mass for $\TPR$ is assigned to a particular point $\tprate$, the probability mass function simplifies to
+\begin{equation}
+    f_{\TP_p}{t} = \binom{p}{t} \tprate^{t_p}(1-\tprate)^{p-t},
+\end{equation}
+which is probability mass function of a binomial distribution.
+
+\begin{figure}
+	\def\svgwidth{\columnwidth}
+	%\def\svgscale{0.75}
+	\centering
+	\captionsetup{justification=centering}
+	\caption
+	{
+		Relative frequency of positive predicitive values for several different parameterizations of the false positive and true positive rates given $\n = 900$ negatives and $\p=100$ positives.
+	}    
+	\input{img/norms.pdf_tex}
+	\label{fig:mixnorm}
+\end{figure}
+
+The simplest kind of uncertainty is given by an interval in which the rate is uniformly distributed across the support.
+\begin{definition}
+An interval is a convex set of real numbers.
+We denote by $\Interval{\underbar{x},\bar{x}}$ an interval with a lower-bound $\underbar{x}$ and an upper-bound $\bar{x}$.
+\end{definition}
+
+A confidence interval may be specified in interval notation.
+Here, however, we consider an algebra for interval arithmetic and put it to use quantifying our ignorance about the distribution of parameters after, for instance, a union operation.
+
+The performance measures summarized by \cref{tbl:perf_sum} depend upon the false positive rate $\fprate$, false negative rate $\fnrate$, and proportion of positives $\lambda$ being \emph{known}.
+Any parameters that are not known with certainty may be replaced in the above table by intervals that (are assumed to) contain the expected value.
+As a consequence, the performance measure will also be an interval.
+
+\emph{Maximum} uncertainty is when the parameter value is in the interval $[0,1]$, e.g., $[\lambda] = [0,1]$, and \emph{minimum} uncertainty is when the parameter is some value in the degenerate interval $[x,x]$, e.g., $[\fprate] = [.2,.2]$. The more certain--the smaller the width of the intervals--the more certain the performance measure.
+
+When using interval arithmetic, the \emph{dependency problem} can lead to overly pessimistic bounds.
+In our case, the formulae are simple enough to ensure dependencies are satisfied. We show the results of an uncertain proportion of positives $[\lambda]$ for the \emph{accuracy} measure in the following example.
+
+\begin{example}
+	Suppose we wish to determine the expected accuracy given that the proportion of positives $\lambda$ is known to be some value in the interval $[\lambda]$, and that the false positive and false negative rates lie in $[\fprate]$ and $[\fnrate]$ respectively.
+	By the accuracy formula $\acc = \lambda(1-\fnrate) + (1-\lambda)(1-\fprate)$, the expected accuracy is some value in the interval
+	\begin{equation}
+		\acc([\fprate],[\fnrate] ; [\lambda]) =
+		\biggl[
+		\overline{\lambda}(1-\overline{\fnrate}) +
+		(1-\overline{\lambda})(1-\overline{\fprate}),\;
+		\underline{\lambda}(1-\underline{\fnrate}) +
+		(1-\underline{\lambda})(1-\underline{\fprate})
+		\biggr],
+	\end{equation}
+	where the lower bound is attained at the worst-case rates $(\overline{\fprate}, \overline{\fnrate}, \overline{\lambda})$ and the upper bound at the best-case rates $(\underline{\fprate}, \underline{\fnrate}, \underline{\lambda})$.
+\end{example}
+
+We may not be interested in the \emph{expected} value, but the smallest set of values such that with probability $1-\alpha$ the true rate 
+realizes some value in the set, which is typically an \emph{interval}, i.e., a confidence interval.
+
+Intervals represent an uncertainty and they manifest themselves in two independent ways.
+The common notion of the \emph{confidence interval} is a product of the probabilistic model, i.e., the realized true positive rate $\tprateob$, which is normally centered around the expected true positive rate $\tprate$ as discussed in \cref{sec:asymtotic}.
+We may use \emph{interval arithmetic} and replace point values interval values, point values being a degenerate case.
+Basic interval arithmetic is presented in \cite{basicinterval}.
+
+A set sampled from $\tilde{A}[\fprate][\fnrate]$ is an approximate set such that the $(1-\alpha)\cdot 100\%$ asymptotic confidence intervals for the realized false negative and false positive rates are respectively given by
+\begin{equation}
+\Interval{\fnrate} = \fnrate \pm \sqrt{\frac{\fnrate(1-\fnrate)}{p}}\, \Phi^{-1}\!\left(\frac{\alpha}{2}\right)
+\end{equation}
+and
+\begin{equation}
+\Interval{\fprate} = \fprate \pm \sqrt{\frac{\fprate(1-\fprate)}{n}}\, \Phi^{-1}\!\left(\frac{\alpha}{2}\right),
+\end{equation}
+where $p$ and $n$ are the number of positives and negatives respectively and $\Phi^{-1}$ is the inverse CDF of the standard normal (see \cref{eq:conf_fpr,eq:conf_tpr}).
+
+
+\begin{theorem}
+\label{thm:uncertain_rates_comp_set}
+The \emph{complement} of an approximate set with a false negative rate $\Interval{\fnrate}$ and false positive rate $\Interval{\fprate}$ is an approximate set with a false negative rate $\Interval{\fprate}$ and false positive rate $\Interval{\fnrate}$.
+\end{theorem}
+\begin{proof}
+Follows immediately from \cref{thm:complement_rates}: complementation swaps positives and negatives, so it swaps the false positive and false negative rates. Since the interval endpoints swap accordingly, the result holds.
+\end{proof}
+
+
+

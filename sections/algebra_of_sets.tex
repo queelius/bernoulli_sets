@@ -1,0 +1,148 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Algebra of sets
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Algebra of sets} 
+\label{sec:setalgebra}
+A \emph{set}\index{set} is an unordered collection of distinct elements.
+If we know the elements in a set, we may denote the set by these elements, e.g., $\{a,c,b\}$ denotes a set whose members are exactly $a$, $b$, and $c$.
+
+Two sets of particular importance are the empty set, denoted by $\emptyset$, which has no members, and the \emph{universal set}, in which every element of interest is a member.
+
+A \emph{finite set} has a finite number of elements.
+For example, $\{ 1, 3, 5 \}$ is a finite set with three elements.
+When sets $A$ and $B$ are \emph{isomorphic}, denoted by $A 
+\cong B$, they can be put into a one-to-one correspondence (bijection), e.g., $\{b,a,c\} \cong \{1,2,3\}$.
+
+The cardinality of a finite set $A$ is the number of elements in the set, denoted by $|A|$, e.g., $|\left\{ 1, 3, 5\right\}| = 3$.
+A \emph{countably infinite set} is isomorphic to the set of \emph{natural numbers} $\mathbb{N} = \{1,2,3,4,5,\ldots\}$.
+
+
+Given two elements $a$ and $b$, an ordered pair of $a$ then $b$ is denoted by $(a,b)$, where $(a,b) = (c,d)$ \emph{if and only if} $a = c$ and $b = d$.
+Ordered pairs are non-commutative and non-associative, i.e., $(a,b) \neq (b,a)$ if $a \neq b$ and $(a,(b,c)) \neq ((b,a),c)$.
+
+Related to the ordered pair is the Cartesian product.
+\begin{definition}
+	The set $X \times Y = \left\{(x,y) : x \in X \land y \in Y\right\}$ is the Cartesian product of sets $X$ and $Y$.
+\end{definition}
+By the non-commutative and non-associative property of ordered pairs, the Cartesian product is non-commutative and non-associative.
+However, they are isomorphic, i.e., $X \times Y \cong Y \times X$.
+
+A \emph{tuple} is a generalization of order pairs which can consist of an arbitrary number of elements, e.g., $(x_1,x_2,\ldots,x_n)$.
+\begin{definition}[$n$-fold Cartesian product]
+	The $n$-ary Cartesian product of sets $X[1],\ldots,X[n]$, is given by $X[1] \times \cdots \times X[n] = \left\{(x_1,\ldots,x_n) : x_1 \in X[1] \land \cdots \land x_n \in X[n]\right\}$.
+\end{definition}
+Note that
+	$X[1] \times X[2] \times X[3] \cong X[1] \times \left(X[2] \times X[3]\right) \cong \left(X[1] \times X[2]\right) \times X[3]$,
+thus we may implicitly convert between them without ambiguity.
+
+If each set in the $n$-ary Cartesian product is the same, the power notation may be used, e.g., $X^3 = X \times X \times X$.
+As special cases, $X^0 = \{ \emptyset \}$ and $X^1 = X$.
+
+A \emph{binary relation} over sets $A$ and $B$ is any subset of $A \times B$.
+A fundamental relation is the member-of relation, where $x \in A$ denotes that an object $x$ is a member of a set $A$.
+A set $A$ is a \emph{subset} of a set $B$ if every member of $A$ is a member $B$, denoted by $A \subseteq B$.
+The subset relation forms a \emph{partial order}, i.e., if $A \subseteq B$ and $B \subseteq C$ then $A \subseteq C$ and 
+if $A \subseteq B$ and $B \subseteq A$ then $A$ and $B$ are \emph{equal}, denoted by $A = B$.
+
+
+\begin{definition}
+	Set builder notation: $\{x : P(x)\}$ represents the set of all elements $x$ that satisfy the predicate $P(x)$.
+\end{definition}
+
+
+\begin{definition}
+	A \emph{function} of type $X \mapsto Y$ is a binary relation on $X \times Y$ with the constraint that each $x \in X$ is paired with exactly one $y \in Y$.
+\end{definition}
+A function of type $X \mapsto Y$ has a domain $X$ and a codomain $Y$.
+Since every $x \in X$, given a pair $(x,y) \in f$, $y$ may also be denoted by $f(x)$.
+
+The \emph{power set} of a set $A$, denoted by $\mathcal{P}(A)$, is the set of sets that contains all of the possible subsets of $A$, e.g., $\mathcal{P}(\{a, b\})= \left\{ \emptyset, \{a\}, \{b\}, \{a, b\} \right\}$.
+
+A predicate is a function that maps elements in its domain to true (denoted by $1$) or false (denoted by $0$).
+A predicate function of particular importance is the indicator function
+\begin{equation}
+	\mathbf{1}_A : X \mapsto \{0,1\}
+\end{equation}
+defined as
+\begin{equation}
+	\mathbf{1}_A(x) =
+	\begin{cases}
+		0 & \text{if $x \notin A$},\\
+		1 & \text{if $x \in A$}.
+	\end{cases}
+\end{equation}
+
+The indicator function admits the construction of predicates for any relation, e.g., a binary predicate $\operatorname{P}$ for a binary relation $R \subseteq A \times B$ is defined as $\operatorname{P}(x_1,x_2) = \mathbf{1}_R((x_1,x_2))$.
+Denoting the \emph{universal set} by $X$, all the relations mentioned previously are \emph{binary predicates}, such as $\in : X \times \mathcal{P}(X) \mapsto \{0,1\}$ and $\subseteq : \mathcal{P}(X) \times \mathcal{P}(X) \mapsto \{0,1\}$.
+
+A few important operations on sets are \emph{set-union} $\cup : \mathcal{P}(X) \times \mathcal{P}(X) \mapsto \mathcal{P}(X)$, \emph{set-intersection}, $\cap : \mathcal{P}(X) \times \mathcal{P}(X) \mapsto \mathcal{P}(X)$, and \emph{set-complement} $^c : \mathcal{P}(X) \mapsto \mathcal{P}(X)$, respectively defined as
+\begin{align}
+	A \cup B &= \{x \in X : x \in A \lor x \in B\},\\
+	A \cap B &= \{x \in X : x \in A \land x \in B\},\,\text{and}\\
+	A^c &= \{x \in X : x \notin A\}.
+\end{align}
+where $\lor$ and $\land$ are respectively the logical-connectives \emph{or} and \emph{and}.
+If $A \cap B = \emptyset$, then we say $A$ and $B$ are \emph{disjoint} sets.
+
+\subsection{Approximate sets}
+\label{sec:asets}
+Given an objective set $A$, any element that is a member of $A$ is denoted a \emph{positive} (of $A$) and otherwise the element is denoted a \emph{negative}.
+Suppose $\hat{A}$ is used as an \emph{approximation} of $A$.
+If the \emph{only} information we have about $A$ is given by $\hat{A}$, then we may perform membership tests on $\hat{A}$ to make \emph{predictions} or \emph{estimations} about $A$.
+
+There are two ways a binary prediction can be false.
+\begin{enumerate}
+	\item A \emph{false positive} occurs if a negative of the objective set is predicted to be a positive. False positives are also known as \emph{type I errors}.
+	The complement of false positives are \emph{true negatives}.
+	\item A \emph{false negative} occurs if a positive of the objective set is predicted to be a negative. False negatives are also known as \emph{type II errors}.
+	The complement of false negatives are \emph{true positives}.
+\end{enumerate} 
+
+If we denote the set of false positives by $FP$, true positives by $TP$, false negatives by $FN$, and true negatives by $TN$, then the objective set $A = FN \cup TP$ and the approximate set $\hat{A} = TP \cup FP$.
+See \cref{fig:ex_approx_set} for an illustration.
+\begin{figure}[ht]
+	\caption{An approximate set $\hat{A}$ of an objective set $A$}
+	\label{fig:ex_approx_set}
+	\centering
+	\def\svgwidth{\columnwidth/4}
+	\input{img/aset_fp_fn.tex}
+\end{figure}
+
+If we only have access to the approximation $\hat{A}$, we do not have the ability to partition the universe into the disjoint sets $FP$, $TP$, $FN$, and $TN$ as demonstrated in \cref{fig:ex_approx_set}.
+However, we can quantify the degree of \emph{uncertainty} about the elements that it predicts to be positive or negative.
+The false positive and true negative rates are given by the following.
+\begin{definition}
+	\label{def:fprate}
+	The \emph{false positive rate} is the proportion of predictions that are \emph{false positives} as given by
+	\begin{equation}
+	\hat{\alpha} = \frac{|FP|}{|FP| + |TN|}
+	\end{equation}
+	and the \emph{true negative rate} is given by $\hat{\tnrate} = 1 - \hat{\alpha}$.
+\end{definition}
+The true positive and false negative rates are given by the following.
+\begin{definition}
+	The \emph{true positive rate} is the proportion of predictions that are \emph{true positives} as given by
+	\begin{equation}
+	\hat{\tprate} = \frac{|TP|}{|TP| + |FN|}
+	\end{equation}
+	and the \emph{false negative rate} is given by $\hat{\beta} = 1 - \hat{\tprate}$.
+\end{definition}
+
+The \emph{probabilities} of the four possible predictive outcomes are given by 
+\cref{tbl:contingency_table}.
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{@{} l l l @{}}
+		\toprule
+		& \textbf{positive} & \textbf{negative}\\
+		\midrule
+		\textbf{predict positive} & $\hat{\tprate}=1-\hat{\beta}$ & 
+		$\hat{\alpha}=1-\hat{\tnrate}$\\
+		\textbf{predict negative} & $\hat{\beta}=1-\hat{\tprate}$ & 
+		$\hat{\tnrate}=1-\hat{\alpha}$\\
+		\bottomrule
+	\end{tabular}
+	\caption{The $2 \times 2$ contingency table of outcomes for approximate sets.}
+	\label{tbl:contingency_table}        
+\end{table}

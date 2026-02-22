@@ -1,0 +1,46 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}
+
+Many computational systems rely on \emph{approximate set representations}---data structures whose membership queries may err, returning false positives or false negatives with known rates.
+Bloom filters~\cite{bf}, perfect hash filters~\cite{phf}, and related probabilistic data structures achieve dramatic space savings by tolerating such errors, and individual structures are well understood.
+However, practical systems rarely use a single approximate set in isolation.
+Encrypted search indexes, database query planners, and distributed systems routinely compose approximate sets through union, intersection, complement, and difference, and the resulting error behavior has traditionally been analyzed on a case-by-case basis.
+
+\paragraph{The gap.}
+The existing literature lacks a \emph{compositional algebra} for approximate sets: a framework in which the error rates of any set-theoretic expression are mechanically computable from the error rates of its operands.
+Without such a framework, each new combination of approximate sets requires a bespoke analysis, and higher-order compositions---approximate sets of approximate sets---remain largely uncharacterized.
+
+\paragraph{Contribution.}
+We introduce the \emph{Bernoulli set model}, a probabilistic framework for \emph{random approximate sets} built on two axioms: element-wise independence of errors and conditional independence of block error rates.
+The central result is \emph{compositional closure}: every set-theoretic operation on Bernoulli sets produces a Bernoulli set whose error rates are closed-form functions of the input rates and set cardinalities.
+This closure extends to higher-order compositions via a recursive application of the composition theorem.
+From these axioms we derive:
+\begin{enumerate}[nosep]
+    \item the probability distributions of all standard binary classification measures (precision, recall, accuracy, etc.),
+    \item closed-form error rates for complement, union, intersection, and set difference,
+    \item the joint entropy of error counts,
+    \item conditions under which approximate sets form commutative monoids, and
+    \item an application to encrypted Boolean search in which compositionality yields all performance guarantees.
+\end{enumerate}
+The framework is formulated as an abstract data type: any implementation whose membership queries satisfy the Bernoulli axioms---including Bloom filters, perfect hash filters, and their compositions---inherits the full theory automatically.
+
+\paragraph{Related work.}
+The original Bloom filter~\cite{bf} introduced approximate set membership with one-sided error.
+Subsequent work has produced a rich family of probabilistic data structures with improved space efficiency or additional functionality, but analyses typically treat each structure in isolation.
+The interval arithmetic approach to uncertain parameters~\cite{basicinterval} addresses a related but distinct problem: propagating uncertainty through arithmetic expressions rather than set-theoretic ones.
+Our framework complements these lines of work by providing an algebraic layer that sits above any particular implementation.
+
+\paragraph{Organization.}
+\Cref{sec:setalgebra} reviews the algebra of sets.
+\Cref{sec:asets} introduces the Bernoulli set model and its axioms, including the higher-order composition theorem.
+\Cref{sec:characteristics} derives the probability distributions of fundamental binary classification measures.
+\Cref{sec:set_theory} derives error rates for all four set-theoretic operations and establishes closure properties.
+\Cref{sec:relational} treats relational predicates (subset, equality) on Bernoulli sets.
+\Cref{sec:intervals} addresses uncertain rate parameters via interval arithmetic.
+\Cref{sec:adt} formulates the Bernoulli set as an abstract data type with space complexity bounds.
+\Cref{sec:entropy} derives the joint entropy of error counts.
+\Cref{sec:algebraic_structure} examines the algebraic structure (commutative monoids) of approximate sets.
+\Cref{sec:bool_search} demonstrates the framework through an application to encrypted Boolean search.
