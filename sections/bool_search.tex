@@ -118,7 +118,7 @@ This is an appropriate abstract data type for settings such as \emph{Encrypted S
 
 We denote the resulting find function that searches over approximate set indexes by $\Find^\sigma$ as opposed to the objective function $\Find$.
 This replacement \emph{induces} approximate result sets, i.e., $\Find^\sigma(q)$ maps to an approximate set of $\Find(q)$.
-Note that $\Find^\sigma$ is a deterministic algorithm that always generates the same output for the same input; it is a function rather than a distribution, but it is compatible with the Bernoulli set model described in \cref{sec:adt}.
+Note that $\Find^\sigma$ is a deterministic algorithm that always generates the same output for the same input; it is a function rather than a distribution, but it is compatible with the Bernoulli set model described in \cref{sec:bernoulli_model}.
 
 \subsection{Encrypted search composition}
 \label{sec:encrypted_search}
@@ -161,27 +161,17 @@ We have established that the result sets of atomic keys are approximate result s
 The set-theoretic results in \cref{sec:set_theory} may now be applied to characterize the result sets of compound Boolean queries.
 
 \begin{example}
-Suppose the search indexes are positive approximate sets each with false positive rate $\fprate$.
-A common type of Boolean query is the \emph{conjunction} of $k$ atomic keys $x_1, \ldots, x_k$.
-The result set
+Suppose the search indexes are positive approximate sets each with false
+positive rate $\fprate$. A common type of Boolean query is the
+\emph{conjunction} of $k$ atomic keys $x_1, \ldots, x_k$. By repeated
+application of the intersection result for positive approximate sets
+(\cref{sec:set_theory}), the result set
 \begin{equation}
     \PASet{R}[\Set{X}] = \bigcap_{j=1}^{k} \PASet{R}[x_j]
 \end{equation}
-is a positive approximate set with an uncertain false positive rate $[\fprate_k] = [\fprate^k, \fprate]$.
-\begin{proof}
-Let $\PASet{R}[x_j]$ denote the approximate result set for key $x_j$.
-By \cref{cor:fprate_atomic_search}, $\PASet{R}[x_j]$ has false positive rate $\fprate$ for each $j \in \{1,\ldots,k\}$.
-
-The proof proceeds by induction on $k$.
-For the base case $k = 1$, the result follows immediately from \cref{cor:fprate_atomic_search}.
-
-For the inductive step, suppose $\PASet{R}[x_1] \cap \cdots \cap \PASet{R}[x_{k-1}]$ is a positive approximate set with uncertain false positive rate $[\fprate^{k-1}, \fprate]$.
-By the intersection rule for positive approximate sets established in \cref{sec:set_theory},
-\begin{equation}
-    \left(\bigcap_{j=1}^{k-1} \PASet{R}[x_j]\right) \cap \PASet{R}[x_k]
-\end{equation}
-is a positive approximate set with uncertain false positive rate $[\fprate^k, \fprate]$.
-\end{proof}
+is a positive approximate set whose false positive rate depends on the
+partition weights induced by the objective result sets
+$\Set{R}[x_1], \ldots, \Set{R}[x_k]$.
 \end{example}
 
 To quantify the performance of the information retrieval system in terms of measures such as precision, recall, and accuracy, we may apply the binary classification results in \cref{sec:perf}.

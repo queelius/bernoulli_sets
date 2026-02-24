@@ -59,7 +59,7 @@ where $t$ is the number of true positives and $f$ is the number of false positiv
 We approximate this function with a second-order Taylor series.
 The gradient of $f$ is given by
 \begin{equation}
-    \nabla{f}(t,f) =
+    \nabla f(t,f) =
     \frac{1}{(t + f)^2}
     \begin{bmatrix}
         f\\
@@ -79,7 +79,7 @@ and the Hessian of $f$ is given by
 A linear approximation $\Fun{g}$ of $f$ that is reasonably accurate near the expected value of $\TP_p$, denoted by $\overline{t}$, and the expected value of $\FP_n$, denoted by $\overline{f}$, is given by
 \begin{equation}
     \Fun{g}(t,f) =
-    f\left(\overline{t},\overline{f}\right) + \nabla{f}(\overline{t},\overline{f}])^{\intercal}
+    f\left(\overline{t},\overline{f}\right) + \nabla f(\overline{t},\overline{f})^{\intercal}
     \begin{bmatrix}
         t - \overline{t}\\
         f - \overline{f}\\
@@ -149,6 +149,7 @@ Substituting this result into \cref{eq:proof_hess1} yields
     \overline{t}\Var{\FP_n}}{(\overline{t} + \overline{f})^3}
 \end{equation}
 By \cref{thm:fpbinom}, $\FP_n$ is binomially distributed with a mean $n \fprate$ and a variance $n \fprate \tnrate$ and by \cref{cor:tpbinom}, $\TP_p$ is binomially distributed with a mean $p \tprate$ and a variance $p \fnrate \tprate$.
+Substituting $\Var{\FP_n} = n \fprate(1-\fprate) = \overline{f}_p(1-\fprate) = \sigma_{f_p}^2$ and $\Var{\TP_p} = p \tprate(1-\tprate) = \overline{t}_p(1-\tprate) = \sigma_{t_p}^2$ completes the proof.
 \end{proof}
 
 \section{Sampling distribution of arbitrary functions}
@@ -175,7 +176,7 @@ If $\RV{Y_1}$ has a well-defined mean and variance, then by the central limit th
 \end{equation}
 converges in distribution to a normal with a mean $\Expect{\RV{Y_1}}$ and a variance $\Var{\RV{Y_1}} / m$
 
-A general approach to estimating $\RV{\overline{Y}_m}$ is given by generating a large sample of matrices and applying the function $\\Fun{g}$ to each to generate a large sample from $\RV{Y_1}$
+A general approach to estimating $\RV{\overline{Y}_m}$ is given by generating a large sample of matrices and applying the function $\Fun{g}$ to each to generate a large sample from $\RV{Y_1}$
 
 % Add this before the bibliography
 
@@ -210,7 +211,7 @@ A general approach to estimating $\RV{\overline{Y}_m}$ is given by generating a 
   \item $\tilde{A}$ --- A random approximate set of $\Set{A}$ with unspecified parameters
   \item $\tilde{A}^\fprate_\tprate$ --- A random approximate set of $\Set{A}$ with false positive rate $\fprate$ and true positive rate $\tprate$
   \item $\tilde{A}[\fprate][-]$ --- A random approximate set of $\Set{A}$ with false positive rate $\fprate$ and unspecified true positive rate
-  \item $\tilde{A}[+][\fnrate]$ --- A random approximate set of $\Set{A}$ with unspecified false positive rate and false negative rate $\fnrate$
+  \item $\tilde{A}[+][\tprate]$ --- A random approximate set of $\Set{A}$ with unspecified false positive rate and true positive rate $\tprate$
   \item $\tilde{A}_+$ --- A positive random approximate set of $\Set{A}$ (no false negatives)
   \item $\tilde{A}_+^\fprate$ --- A positive random approximate set of $\Set{A}$ with false positive rate $\fprate$
   \item $\tilde{A}_-$ --- A negative random approximate set of $\Set{A}$ (no false positives)
@@ -258,7 +259,7 @@ A general approach to estimating $\RV{\overline{Y}_m}$ is given by generating a 
 
 \subsection{Set-Theoretic Operations (Section~\ref{sec:set_theory})}
 \begin{itemize}
-  \item $\alpha_1, \alpha_2, \alpha_3$ --- Proportions of a partition of the relevant objective set used in union/intersection error rate derivations
+  \item $w_1, w_2, w_3$ --- Partition weights used in union/intersection error rate derivations; see equations (5.3), (5.7), and (5.11) for their precise definitions
   \item $\fprate_1, \fprate_2$ --- False positive rates of two input approximate sets
   \item $\fnrate_1, \fnrate_2$ --- False negative rates of two input approximate sets
 \end{itemize}

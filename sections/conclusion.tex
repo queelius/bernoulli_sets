@@ -1,0 +1,17 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Conclusion
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+We have developed the Bernoulli set model, a compositionally closed probabilistic framework for random approximate sets parameterized by false positive and false negative rates.
+The central contribution is \emph{closure}: the error rates of any set-theoretic expression---complement, union, intersection, difference---are closed-form functions of the operand rates and set cardinalities, and this closure extends to higher-order compositions via the recursive $k$-fold composition theorem.
+From two axioms (element-wise independence and conditional independence of block error rates), we derived the probability distributions of all standard binary classification measures, the joint entropy of error counts, and conditions under which approximate sets form commutative monoids.
+The framework is formulated as an abstract data type, so any implementation satisfying the Bernoulli axioms---Bloom filters, perfect hash filters, or their compositions---inherits the full theory.
+We demonstrated this compositionality through an application to encrypted Boolean search.
+
+The model rests on two structural assumptions: element-wise independence of errors and a finite universal set.
+These are satisfied by most practical probabilistic data structures but exclude settings with correlated errors (e.g., locality-sensitive hashing) or continuous sample spaces.
+Extending the framework to dependent error models, continuous universes, and richer partition structures (beyond the second-order positive/negative split) are natural directions for future work.
+A type-theoretic generalization---treating approximate Booleans, maps, and relations as instances of a single algebraic framework---is developed in companion work on approximate algebraic data types.

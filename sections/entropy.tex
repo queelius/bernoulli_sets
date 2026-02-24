@@ -37,7 +37,7 @@ Therefore the joint entropy decomposes additively:
 The random variable $\FP_m$ is binomially distributed,
 $\FP_m \sim \operatorname{Bin}(u - m,\, \fprate)$.
 The entropy of a binomial distribution $\operatorname{Bin}(n, p)$ admits the
-well-known asymptotic expansion
+well-known asymptotic expansion~\cite{coverThomas}
 \begin{equation}
 \label{eq:binomial_entropy_asymp}
     H = \frac{1}{2}\log_2\!\bigl(2\pi e \cdot n \cdot p(1-p)\bigr)
@@ -107,3 +107,37 @@ The \emph{expected} number of false positives, marginalizing over $\POS$, is
 confirming that the marginal expected false positive count depends only on the
 expected number of negatives and the false positive rate $\fprate$.
 \end{example}
+
+\subsection{Space complexity}
+\label{sec:space_comp}
+If the finite cardinality of a universe is $u$ and the set is \emph{dense} (and the approximation is also dense, i.e., the false negative rate is relatively
+small), then
+\begin{equation}
+    \mathcal{O}(u) \; \si{bits}
+\end{equation}
+are needed to code the set, which is independent of $\p$, the false positive rate, and the false negative rate.
+
+The lower-bound on the \emph{expected} space complexity of a data structure that models the \emph{positive random approximate set} where the elements are over a \emph{countably infinite} universe is given by the following proposition.
+\begin{proposition}
+\label{pst:approx_l_b}
+The \emph{information-theoretic lower-bound}\index{information-theoretic lower-bound} of a data structure that implements the countably infinite \emph{positive random approximate set} abstract data type has an \emph{expected} bit length given by
+\begin{equation}
+    -\log_2 \fprate \; \si{bits \per element},
+\end{equation}
+where $\fprate > 0$ is the false positive rate\index{false positive rate}.
+\end{proposition}
+\begin{proof}[Proof sketch]
+Each of $\p$ stored elements must be distinguished from the countably infinite negative class with false positive probability at most $\fprate$.
+By a counting argument, the number of distinguishable subsets of size $\p$ requires at least $-\p \log_2 \fprate$ bits, or $-\log_2 \fprate$ bits per element.
+\end{proof}
+\begin{remark}
+The general case $0 < \tprate < 1$ remains open; the scaling argument $-\tprate \log_2 \fprate$ is plausible but is not a valid information-theoretic lower bound, since the encoding problem changes qualitatively when elements are randomly dropped.
+\end{remark}
+
+A well-known implementation of countably infinite \emph{positive approximate set} is the Bloom filter\cite{bf} which has an expected space complexity given
+by
+\begin{equation}
+    -\frac{1}{\ln 2} \log_2 \fprate \; \si{bits \per element},
+\end{equation}
+thus the absolute efficiency of the Bloom filter is $\ln 2 \approx 0.69$.
+A practical implementation of the \emph{positive random approximate set} is given by the \emph{Perfect Hash Filter}\cite{phf}, which compares favorably to the Bloom filter in many circumstances.\footnote{The \emph{Singular Hash Set}\cite{shs} is an example of a data structure that obtains optimality using \emph{brute-force} search, so it is not practical for even relatively small objective sets. However, its primary purpose is analytic tractability.}

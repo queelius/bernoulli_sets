@@ -18,9 +18,9 @@ Any data type needs one or more \emph{value constructors}, functions that map to
 %An \emph{abstract data type} is a set of objects whose behavior is defined by a set of values and a set of morphisms, where behavior is defined with respect to axiomatic semantics or operational semantics of an abstract machine.
 %The abstract data type of the \emph{random approximate set} has an axiomatic specification.
 
-The random approximate set is an abstract data type that models a \emph{set} with an additional set of \emph{probabilistic} axioms described in \cref{sec:asets}.
+The random approximate set is an abstract data type that models a \emph{set} with an additional set of \emph{probabilistic} axioms described in \cref{sec:bernoulli_model}.
 Suppose $T$ is a data type that overloads the \emph{member-of} predicate $\SetContains : U \times T \mapsto \{0,1\}$ and has a \emph{value constructor} $\ctor{\fprate}{\tprate}$ that is a \emph{conditional probability distribution} over values of $T$ given elements of type $2^U$.
-Data type $T$ \emph{models} the abstract data type of the random approximate set over elements in $U$ with a false positive rate $\fprate$ and true positive rate $\tprate$ if \cref{asm:fprate,asm:tprate} are satisfied, i.e.,
+Data type $T$ \emph{models} the abstract data type of the random approximate set over elements in $U$ with a false positive rate $\fprate$ and true positive rate $\tprate$ if \cref{def:sample_fprate,def:sample_tprate} are satisfied, i.e.,
 \begin{equation}
 	\Prob{\SetContains[x][\ctor{\fprate}{\tprate}(A)] | \SetNotContains[x][A]} = \fprate
 \end{equation}
@@ -110,9 +110,9 @@ The \emph{mean} false positive rate,
 is an unbiased estimator of $\fprate$ and the population variance
 \begin{equation}
     s^2_\fprate = \frac{1}{|U_p|}
-        \sum_{X \in U_p} \fprateob(X),
+        \sum_{X \in U_p} \left(\fprateob(X) - \overline{\fprate}\right)^2,
 \end{equation}
-is an unbiased estimator of $\Var{\alpha_n} = \fprate(1-\fprate)/\n$.
+is an estimator of $\Var{\alpha_n} = \fprate(1-\fprate)/\n$.
 \begin{proof}
 We imagine that the function $\ctor{\fprate}{\tprate}$ caches the output of a \emph{non-deterministic} process that conforms to the probabilistic model.
 Thus, each time the function maps an objective set $X$ of cardinality $\p$ to its approximation, the algorithm \emph{observes} a realization of 
@@ -148,9 +148,11 @@ where $\fprate > 0$ is the false positive rate\index{false positive rate} and $\
 \begin{proof}[Proof sketch]
 For a positive approximate set ($\tprate = 1$), each of $\p$ stored elements must be distinguished from the countably infinite negative class with false positive probability at most $\fprate$.
 By a counting argument, the number of distinguishable subsets of size $\p$ requires at least $-\p \log_2 \fprate$ bits, or $-\log_2 \fprate$ bits per element.
-For the general case with $\tprate \leq 1$, each positive element is independently retained with probability $\tprate$, so on average $\p \tprate$ elements are effectively encoded.
-Each encoded element still requires $-\log_2 \fprate$ bits to maintain the false positive guarantee, giving a total of $-\p \tprate \log_2 \fprate$ bits, or $-\tprate \log_2 \fprate$ bits per element.
 \end{proof}
+\begin{remark}
+The general case ($\tprate < 1$) is conjectured to scale as $-\tprate \log_2 \fprate$ bits per element by an effective-encoding argument: on average $\p \tprate$ elements are retained, each requiring $-\log_2 \fprate$ bits.
+A rigorous proof for the two-sided case remains open.
+\end{remark}
 
 The \emph{relative space efficiency}\index{relative space efficiency} of a data structure\index{data structure} $X$ to a data structure $Y$ is some value greater than $0$ and is given by the ratio of the bit length of $Y$ to the bit length of $X$,
 \begin{equation}
@@ -182,7 +184,7 @@ by
 thus the absolute efficiency of the Bloom filter is $\ln 2 \approx 0.69$.
 A practical implementation of the \emph{positive random approximate set} is given by the \emph{Perfect Hash Filter}\cite{phf}, which compares favorably to the Bloom filter in may circumstances.\footnote{The \emph{Singular Hash Set}\cite{shs} is an example of a data structure that obtains optimality using \emph{brute-force} search, so it is not practical for even relatively small objective sets. However, its primary purpose is analytic tractability.}
 
-Given an approximate set sampled from $\tilde{A}[\fprate][\fnrate]$, the method of moments estimator for $\p = |A|$ is undefined for countably infinite universes.
+Given an approximate set sampled from $\tilde{A}[\fprate][\tprate]$, the method of moments estimator for $\p = |A|$ is undefined for countably infinite universes.
 Suppose we have a data structure $X$ that \emph{models} random approximate sets with an \emph{expected} space complexity proportional to $\p$, i.e., $\p \cdot \Fun{b}(\tprate,\fprate)$ bits, where $\Fun{b}$ is the expected bits per \emph{positive} element given a false positive rate $\fprate$ and true positive rate $\tprate$.
 Then, given an object $x$ of type $X$, an estimator of $\p$ is
 \begin{equation}

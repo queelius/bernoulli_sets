@@ -411,13 +411,9 @@ $\tilde{A}_2$ will be erroneously excluded.
 \begin{table}[t]
 \centering
 \caption{Error rates of set-theoretic operations on Bernoulli sets.
-The partition weights $w_1$, $w_2$, and $w_3$ are
-operation-dependent: $w_1$ is the proportion exclusive
-to $A_1$, $w_2$ is the proportion exclusive to $A_2$, and $w_3$
-is the proportion in both.
-See
-\cref{eq:union_weights,eq:intersect_weights,eq:setdiff_weights}
-for precise definitions.}
+The partition weights $w_1$, $w_2$, $w_3$ are operation-dependent;
+see \cref{eq:union_weights,eq:intersect_weights,eq:setdiff_weights}
+for their precise definitions.}
 \label{tab:set_ops}
 \begin{tabular}{@{} l l l @{}}
 \toprule
@@ -449,6 +445,31 @@ $\tilde{A}_1 \setminus \tilde{A}_2$
 
 \Cref{tab:set_ops} summarizes the error rates derived in the preceding
 subsections.
+
+\begin{example}[Numerical illustration of union error rates]
+\label{ex:numerical_union}
+Let $|U| = 1000$, $|A_1| = 100$, $|A_2| = 80$, and $|A_1 \cap A_2| = 30$.
+Then $|A_1 \cup A_2| = 100 + 80 - 30 = 150$ and the partition weights for the union (\cref{eq:union_weights}) are
+\begin{equation}
+w_1 = \frac{70}{150} \approx 0.467, \quad
+w_2 = \frac{50}{150} \approx 0.333, \quad
+w_3 = \frac{30}{150} = 0.200.
+\end{equation}
+Suppose $\fprate_1 = 0.01$, $\fprate_2 = 0.02$, $\fnrate_1 = 0.05$, and $\fnrate_2 = 0.03$.
+By \cref{thm:union_fprate}, the union FPR is
+\begin{equation}
+\fprate = 1 - (1 - 0.01)(1 - 0.02) = 1 - 0.99 \times 0.98 = 0.0298.
+\end{equation}
+By \cref{thm:union_fnrate}, the union FNR is
+\begin{align}
+\fnrate &= 0.467 \times 0.05 \times (1 - 0.02)
+         + 0.333 \times 0.03 \times (1 - 0.01)
+         + 0.200 \times 0.05 \times 0.03 \notag \\
+       &= 0.02288 + 0.00990 + 0.00030 = 0.03308.
+\end{align}
+Thus $\tilde{A}_1 \cup \tilde{A}_2$ is a Bernoulli set approximating $A_1 \cup A_2$ with FPR $\approx 0.030$ and FNR $\approx 0.033$.
+\end{example}
+
 Several structural observations follow from the table.
 
 The union and intersection formulas exhibit a duality:
@@ -511,11 +532,14 @@ guaranteed to produce a positive Bernoulli set (production $\langle
 \langle \mathrm{exp} \rangle \; ::= \; &
     \langle \mathrm{aset} \rangle
     \;\mid\; \langle \mathrm{exp} \rangle \cup \langle \mathrm{exp} \rangle
+    \;\mid\; \langle \mathrm{exp} \rangle \cap \langle \mathrm{exp} \rangle
     \;\mid\; \SetComplement[\langle \mathrm{nexp} \rangle] \\
 \label{eq:grammar_nexp}
 \langle \mathrm{nexp} \rangle \; ::= \; &
     \langle \mathrm{naset} \rangle
     \;\mid\; \langle \mathrm{nexp} \rangle \cup \langle \mathrm{nexp}
+        \rangle
+    \;\mid\; \langle \mathrm{nexp} \rangle \cap \langle \mathrm{nexp}
         \rangle
     \;\mid\; \SetComplement[\langle \mathrm{exp} \rangle]
 \end{align}
@@ -525,7 +549,7 @@ $\langle \mathrm{naset} \rangle$ denotes a negative Bernoulli set.
 The grammar is justified as follows.
 A union of positive Bernoulli sets is positive by
 \cref{cor:union_positive}, and an intersection of positive sets is positive
-by \cref{thm:closure_positive_intersect}.
+by \cref{thm:closure_positive_intersect}; both productions are therefore included.
 Since $A_1 \cap A_2 = \SetComplement[\SetComplement[A_1] \cup
 \SetComplement[A_2]]$, the intersection of two positive sets may be
 expressed as the complement of a union of two negative sets (via

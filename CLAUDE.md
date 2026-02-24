@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Research paper: **"Bernoulli sets: a model for modeling sets with random errors and corresponding random binary classification measures"** by Alexander Towell. Formalizes *random approximate sets* (Bernoulli sets) — probabilistic sets that approximate an objective set with quantifiable false positive/negative rates. Applications include Bloom filters, perfect hash filters, and encrypted search with Boolean query algebras.
+Research paper: **"Bernoulli sets: a model for sets with random errors and corresponding random binary classification measures"** by Alexander Towell. Formalizes *random approximate sets* (Bernoulli sets) — probabilistic sets that approximate an objective set with quantifiable false positive/negative rates. Applications include Bloom filters, perfect hash filters, and encrypted search with Boolean query algebras.
 
 This paper absorbed content from the former `bernoulli_sets_higher_order` paper. Original files preserved in `archive.zip`.
 
@@ -30,10 +30,9 @@ pdflatex main.tex && bibtex main && pdflatex main.tex && pdflatex main.tex
 ## Section Order
 
 1. intro → 2. algebra_of_sets → 3. bernoulli_model →
-4. distributions → 5. derived_distributions_higher_order →
-6. set_theory → 7. relational → 8. uncertain_rates →
-9. adt → 10. entropy → 11. algebraic_structure →
-12. bool_search → appendix
+4. distributions → 5. set_theory → 6. relational →
+7. uncertain_rates → 8. entropy → 9. algebraic_structure →
+10. bool_search → appendix
 
 ## Key Notation (from alex.sty)
 
@@ -45,4 +44,14 @@ pdflatex main.tex && bibtex main && pdflatex main.tex && pdflatex main.tex
 
 ## Conceptual Layers
 
-1. **Set algebra** → 2. **Bernoulli model** (FPR/FNR axioms) → 3. **Derived distributions** (PPV, NPV) → 4. **Higher-order compositions** (k-th order recursion) → 5. **Set theory** (error propagation through operations) → 6. **Extensions** (relational algebra, interval-valued rates, entropy, ADT, Boolean search)
+1. **Set algebra** → 2. **Bernoulli model** (FPR/FNR axioms, model order = block count) → 3. **Derived distributions** (PPV, NPV) → 4. **Higher-order models and k-fold composition** → 5. **Set theory** (error propagation through operations) → 6. **Extensions** (relational algebra, interval-valued rates, entropy, ADT, Boolean search)
+
+## Scope Boundaries
+
+This paper covers the **set-level** Bernoulli model. Content that belongs elsewhere:
+
+- **Approximate Boolean functions** (AND, OR, NOT as maps): `bernoulli_maps/`
+- **Algebraic types** (Bool as a type, sum/product types, computational basis): `bernoulli_data_type/`
+- **Relational operators** (join, project over approximate relations): `bernoulli_relations/`
+
+**What stays here**: The Boolean universe example ($U = \{\top, \bot\}$) as a minimal worked example for the PMF, and the observation that membership queries on any Bernoulli set return Bernoulli Booleans. These are set-level results that motivate the type-theoretic generalizations in other papers.

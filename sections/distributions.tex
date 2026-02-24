@@ -11,7 +11,7 @@ We are typically interested in the error rates of \emph{special} subsets.
 For example, if we have a universal set $\Set{X}$ and with probability $P(x)$ an element $x \in \Set{X}$ is tested for membership in a collection of sets over $\Set{X}$, then to reduce the expected error rate on membership tests elements with higher probability of begin tested should be assigned smaller error rates.
 
 
-The first-order random approximate sets are \emph{parameterized} by the \emph{expected} rates of two types of error, false negative and false positive rates.
+The second-order random approximate sets are \emph{parameterized} by the \emph{expected} rates of two types of error, false negative and false positive rates.
 In this section, we derive the distribution for these rates.
 
 \begin{definition}
@@ -31,7 +31,7 @@ The uncertain number of false positives is a random variable denoted by $\FP$ an
 The number of false positives given a specific number of negatives is given by the following theorem.
 \begin{theorem}
 \label{thm:fpbinom}
-The random number of false positives $\FP$ given $\RV{N} = n$ in the first-order random approximate set $\tilde{\RV{R}}[\fprate]$ is given by
+The random number of false positives $\FP$ given $\RV{N} = n$ in the second-order random approximate set $\tilde{\RV{R}}[\fprate]$ is given by
 \begin{equation}
 	\FP_n = n \alpha
 \end{equation}
@@ -41,7 +41,7 @@ with a distribution given by
 \end{equation}
 \end{theorem}
 \begin{proof}
-By \cref{asm:fprate}, the uncertain outcome that a negative element \emph{tests} as positive is a Bernoulli trial with a mean $\fprate$.
+By \cref{prop:element_rates}, the uncertain outcome that a negative element \emph{tests} as positive is a Bernoulli trial with a mean $\fprate$.
 Since there are $n$ such independent and identically distributed trials, the number of false positives is binomially distributed with a mean $n \fprate$.
 \end{proof}
 
@@ -113,7 +113,7 @@ Given $p$ positives, the uncertain number of \emph{false negatives} in random ap
 \end{equation}
 \end{theorem}
 \begin{proof}
-By \cref{asm:fprate}, the probability that a positive element \emph{tests} as negative is $\fnrate$.
+By \cref{prop:element_rates}, the probability that a positive element \emph{tests} as negative is $\fnrate$.
 Thus, each test is a Bernoulli trial.
 Since there are $p = \Card{\Set{S}}$ such independent and identically distributed trials with a probability of ``success'' $\fnrate$, the number of false negatives is binomially distributed.
 \end{proof}
@@ -196,7 +196,7 @@ The limiting distributions for the false positive and true positive rates are gi
     	\alpha_n = \frac{\RV{X_1}}{n} + \cdots + \frac{\RV{X_n}}{n},
     \end{equation}
     where $\RV{X_1},\ldots,\RV{X_n}$ are $n$ independent Bernoulli trials each with a mean $\fprate$ and a variance $\fprate(1-\fprate)$.
-    Therefore, by the central limit theorem~\cite{feller}, $\alpha_n$ converges in distribution to a normal distribution with a mean $\fprate$  and a variance $\fprate(1-\fprate)/n$.
+    Therefore, by the central limit theorem~\cite{feller2}, $\alpha_n$ converges in distribution to a normal distribution with a mean $\fprate$  and a variance $\fprate(1-\fprate)/n$.
     The proof for the true positive rate follows the same logic.
 \end{proof}
 By \cref{eq:approxfpr,eq:approxtpr},
@@ -204,8 +204,8 @@ By \cref{eq:approxfpr,eq:approxtpr},
 	\mathrm{TNR}_n \xrightarrow{d} \normdist\!\left(1-\fprate, \fprate(1-\fprate) / n\right) \text{ and } \beta_n \xrightarrow{d} \normdist\!\left(1-\tprate, \tprate(1-\tprate) / p\right).	
 \end{equation}
 
-The Bernoulli set model is the \emph{maximum entropy} distribution over $\{0,1\}^u$ subject to the constraint that each element has a fixed marginal error probability: the binomial distribution maximizes entropy over $\{0,\ldots,n\}$ for a given mean~\cite{feller}.
-As a consequence, any $\alpha$-confidence intervals derived from this model are the widest possible for the indicated $\alpha$ and therefore represent a worst-case uncertainty.
+The Bernoulli set model is the \emph{maximum entropy} distribution over $\{0,1\}^u$ subject to the constraint that each element has a fixed marginal error probability: the binomial distribution maximizes entropy over $\{0,\ldots,n\}$ for a given mean~\cite{coverThomas}.
+As a consequence, any $\gamma$-confidence intervals derived from this model are the widest possible for the indicated $\gamma$ and therefore represent a worst-case uncertainty.
 
 If we generate an approximate set, the uncertain false positive and true positive rates realize certain values, i.e., $\alpha_n = \fprateob$ and $\TPR_p = \tprateob$.
 If the sample space is countably infinite, the distribution is degenerate, e.g., $\alpha_n = \fprate$ with probability $1$. 
@@ -215,15 +215,15 @@ If these outcomes cannot be observed, e.g., it is too costly to compute or the i
 
 \emph{Confidence intervals} that contain the true false positive rate $\fprateob$ and the true true positive rate $\tprateob$ are given by the following corollaries.
 \begin{theorem}
-    Given a random approximate set parameterized by $\fprate$ and $\tprate$, asymptotic $\alpha \cdot 100\%$ confidence intervals for the false positive rate and true positive rate are respectively
+    Given a random approximate set parameterized by $\fprate$ and $\tprate$, asymptotic $\gamma \cdot 100\%$ confidence intervals for the false positive rate and true positive rate are respectively
     \begin{equation}
     \label{eq:conf_fpr}
-    \fprate \pm \sqrt{\frac{\fprate(1-\fprate)}{n}} \Phi^{-1}(\alpha/2)
+    \fprate \pm \sqrt{\frac{\fprate(1-\fprate)}{n}} \Phi^{-1}(\gamma/2)
     \end{equation}
     and
     \begin{equation}
     \label{eq:conf_tpr}
-    \tprate \pm \sqrt{\frac{\tprate(1-\tprate)}{p}} \Phi^{-1}(\alpha/2),
+    \tprate \pm \sqrt{\frac{\tprate(1-\tprate)}{p}} \Phi^{-1}(\gamma/2),
     \end{equation}
     where $\Phi^{-1} : [0,1] \mapsto \RealSet$ is the inverse cumulative distribution function of the standard normal.
 \end{theorem}

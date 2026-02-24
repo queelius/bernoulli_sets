@@ -4,11 +4,11 @@
 \section{Relational probabilities}
 \label{sec:relational}
 The relational \emph{member-of} predicate $\in : U \times 2^U$ is the set-indicator function, or the \emph{membership} predicate, which is true if $x$ is a member of the set $A$ and false otherwise.
-By \cref{asm:fprate,asm:tprate}, given $x \in A$, $x \in \tilde{A}^\fprate_\tprate$ with probability $\tprate$ and given $x \notin A$, $x \in \tilde{A}^\fprate_\tprate$ with probability $\fprate$.
-These probabilities are axiomatic in the first-order random approximate set model.
+By \cref{prop:element_rates}, given $x \in A$, $x \in \tilde{A}^\fprate_\tprate$ with probability $\tprate$ and given $x \notin A$, $x \in \tilde{A}^\fprate_\tprate$ with probability $\fprate$.
+These probabilities are axiomatic in the second-order random approximate set model.
 
 Other kinds of relational predicates are functions of the \emph{member-of} predicate, in particular the subset $\subseteq : 2^U \times 2^U \mapsto \{0,1\}$, equality $= : 2^U \times 2^U \mapsto \{0,1\}$, and
-proper subset $\subset : 2^U \times 2^U \mapsto \{0,1\}$ predicates respectively defined as
+proper subset $\subset : 2^U \times 2^U \mapsto \{0,1\}$ predicates respectively defined as (where $[\phi]$ denotes the Iverson bracket: $1$ if $\phi$ is true, $0$ otherwise)
 \begin{align}
 \label{def:subset_pred}
 A \subseteq B	&= \prod_{x \in A} [x \in B],\\
@@ -80,30 +80,50 @@ Setting $|X| = |Y|$ in the subset theorem eliminates the middle factor ($|Y| - |
 \begin{corollary}
 	Given $X = Y$, $\tilde{X}^\fprate_\tprate = \tilde{Y}^\fprate_\tprate$ with probability
 	\begin{equation}
-	\left(1 - \tprate\fnrate\right)^{|X|+|Y|}
-	\left(1 - \fprate\tnrate\right)^{2 |U| - |X| - |Y|}.
+	\left(1 - \tprate\fnrate\right)^{2|X|}
+	\left(1 - \fprate\tnrate\right)^{2(|U| - |X|)}.
 	\end{equation}
 \end{corollary}
+\begin{proof}
+Set $\fprate_1 = \fprate_2 = \fprate$ and $\tprate_1 = \tprate_2 = \tprate$
+in the preceding corollary. Since $X = Y$, the exponents $|X|+|Y| = 2|X|$
+and $2|U|-|X|-|Y| = 2(|U|-|X|)$.
+\end{proof}
 
 
 \begin{corollary}
-	Given $X \subseteq Y$, $\tilde{X}[+][\tprate_1] \subseteq \tilde{Y}[+][\fnrate_2]$ with probability
+	Given $X \subseteq Y$, $\tilde{X}[+][\tprate_1] \subseteq \tilde{Y}[+][\tprate_2]$ with probability
 	\begin{equation}
 	\left(1 - \tprate_1\fnrate_2\right)^{|X|}
 	\end{equation}
 \end{corollary}
+\begin{proof}
+For positive approximate sets, $\fprate_1 = \fprate_2 = 0$, so the
+second and third factors of the subset theorem vanish (each equals $1^n$).
+Only the first factor remains.
+Since $\fnrate_2 = 1 - \tprate_2$, this gives $(1 - \tprate_1 \fnrate_2)^{|X|}$.
+\end{proof}
 
 
 
 
 \begin{corollary}
-	Over an infinite universal set, the probability that two first-order random approximate sets realize the same value is $0$.
+	Over an infinite universal set, the probability that two second-order random approximate sets realize the same value is $0$.
 \end{corollary}
-
+\begin{proof}
+Each factor in the equality probability is strictly less than $1$
+when $\fprate, \tprate \in (0,1)$. As $|U| \to \infty$, the product
+of such factors raised to powers growing with $|U|$ tends to $0$.
+\end{proof}
 
 \begin{corollary}
-	Over an infinite universal set, the probability that a first-order random approximate set realizes a value that is a subset of another realization of a first-order random approximate set is $0$.
+	Over an infinite universal set, the probability that a second-order random approximate set realizes a value that is a subset of another realization of a second-order random approximate set is $0$.
 \end{corollary}
+\begin{proof}
+The third factor of the subset probability,
+$(1 - \fprate_1 \tnrate_2)^{|U|-|Y|}$, tends to $0$ as $|U| \to \infty$
+whenever $\fprate_1 \tnrate_2 > 0$.
+\end{proof}
 
 
 

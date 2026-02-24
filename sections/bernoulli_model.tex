@@ -3,6 +3,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Bernoulli set model}
+\label{sec:bernoulli_model}
 In the \emph{Bernoulli} set model, we describe the statistical properties of processes that \emph{generate} approximations of a certain kind that model many existing processes and generalizes to higher-order approximations under algebraic composition.
 
 In what follows, we specify the axioms of the Bernoulli set model.
@@ -20,72 +21,52 @@ More generally, the family $\{\mathbf{1}_{\tilde{A}}(x) : x \in U\}$ is mutually
 
 The complexity in the Bernoulli set model stems from the fact that different subsets of the universal set may exhibit different error rates.
 Suppose the objective set $R \in 2^U$ induces a partition $\{B_1, \ldots, B_n\}$ of $U$ such that elements within each block $B_i$ share a common error rate $\alpha_i$.
-In the first-order (positive-negative) model, $n = 2$: the partition is $\{R, R^c\}$ with block error rates $\alpha_1 = \beta$ (false negative rate on positives) and $\alpha_2 = \alpha$ (false positive rate on negatives).
+\begin{definition}[Model order]
+\label{def:model_order}
+The \emph{order} of a Bernoulli set model is the number of partition blocks $n$.
+A zeroth-order model ($n = 0$) is the exact set.
+A first-order model ($n = 1$) assigns a single error rate to all elements (symmetric channel).
+A second-order model ($n = 2$) distinguishes positives from negatives with rates $\tprate$ and $\fprate$ respectively.
+In general, an $n$-th order model partitions $U$ into $n$ blocks, each with its own error rate; the maximum order is $|U|$.
+\end{definition}
+In the second-order (positive-negative) model, $n = 2$: the partition is $\{R, R^c\}$ with block error rates $\alpha_1 = \beta$ (true positive rate on positives) and $\alpha_2 = \alpha$ (false positive rate on negatives).
 \begin{axiom}[Conditional independence of block error rates]
 \label{asm:fpr_fnr_r_indep}
 Given the objective set $R$, the random error rates $\alpha_1, \ldots, \alpha_n$ for the respective partition blocks $B_1, \ldots, B_n$ are mutually independent.
 \end{axiom}
-For instance, in the first-order model, the random false positive rate $\alpha$ and the random false negative rate $\beta$ are conditionally independent given $R$.
+For instance, in the second-order model, the random false positive rate $\alpha$ and the random true positive rate $\beta$ are conditionally independent given $R$.
 
-There are two natural characteristics of the Bernoulli set model, the random false positive and false negative rates conditioned on $R = A$.
-They are respectively given by
+There are two natural \emph{statistics} of the Bernoulli set model, the random false positive and true positive rates conditioned on $R = A$.
+They are respectively defined by
 \begin{equation}
-\label{asm:fprate}
+\label{def:sample_fprate}
 	\alpha = \frac{1}{|A^c|} \sum_{x \in A^c} \mathbf{1}_{\tilde{A}}(x)
 \end{equation}
 and
 \begin{equation}
-\label{asm:tprate}
+\label{def:sample_tprate}
 	\beta = \frac{1}{|A|} \sum_{x \in A} \mathbf{1}_{\tilde{A}}(x).
 \end{equation}
+\begin{proposition}
+\label{prop:element_rates}
+By \cref{asm:element_indep}, for any single element $x \notin A$,
+$\Prob{\mathbf{1}_{\tilde{A}}(x) = 1} = \fprate$, and for $x \in A$,
+$\Prob{\mathbf{1}_{\tilde{A}}(x) = 1} = \tprate$.
+The expected sample rates satisfy $E[\alpha] = \fprate$ and $E[\beta] = \tprate$.
+\end{proposition}
 
 
 
-Since the random approximate set is \emph{random}, properties like its \emph{false positive rate} and \emph{false negative rate} are also random, respectively modeled by the random false positive rate $\alpha$ and false negative rate $\beta$.
+We denote the second-order random approximate set generative model by $\tilde{R}$, with random false positive rate $\alpha$ and random true positive rate $\beta$ conditioned on the objective set $R$.
+The conditional distribution of $\tilde{R}$ given $R = X$ is denoted by $\tilde{X}$.
+When the rates are degenerate, the model reduces to a deterministic outcome, e.g., $\tilde{A}$ given $\alpha = 0$ and $\beta = 1$ places all probability mass on $A$.
 
-We denote the \emph{first-order} random approximate set generative model by $\tilde{R}$.
-The joint distribution of $\tilde{R}$, $\alpha$, $\beta$, and $R$ given a universal set $U$ has a probability density
+We parameterize $\tilde{X}$ by its expected false positive rate $\fprate$ and expected true positive rate $\tprate$, writing
 \begin{equation}
-f(Y, a, b, X | U).
+\tilde{X}[\fprate][\tprate].
 \end{equation}
-By the axioms of probability theory, this may be decomposed into
-\begin{equation}
-f(Y, a, b, X | U) =
-f(Y | a, b, X, U)
-f(a, b | X)
-f(X | U).
-\end{equation}
-We typically omit the explicit reference to $U$, since it may usually be understood as implicit to the model.
-
-The object of central interest is the distribution of $\tilde{R}$ given $R$.
-The conditional distribution of $\tilde{R}$ given $R = X$ is denote by $\tilde{X}$.
-By the axioms of probability,
-\begin{equation}
-f(\tilde{X}, \alpha, \beta) =
-f(\tilde{X} | \alpha, \beta )
-f(\alpha, \beta | R).
-\end{equation}
-
-
-
-There are a few natural partitions.
-
-
-
-
-
-
-
-If the rates happen to pick out a specific set in the support, then the result is a degenerate distribution, e.g., $\tilde{A}$ given $\alpha = 0$ and $\beta = 0$ is degenerate where all probability mass is assigned to $A$.
-
-We denote the distributions of $\tilde{X}$ given $\mathbb{E}[\alpha] = \fprate$ and $\tilde{X}$ given $\mathbb{E}[\beta] = \fnrate$ respectively by $\tilde{X}[\fprate][-]$ and $\tilde{X}[+][\fnrate]$.
-An object of central interest is the distribution of $\tilde{X}$ given $\mathbb{E}[\alpha] = \fprate$ and $\mathbb{E}[\beta] = \fnrate$, denoted by
-\begin{equation}
-\tilde{X}[\fprate][\fnrate].
-\end{equation}
-
-If we \emph{sample} from $\tilde{A}[\fprate][\fnrate]$, some set $Y \in 2^U$ with false positive rate $a$ and false negative rate $b$ will be realized with probability $f_{\tilde{A}[\fprate][\fnrate] | \alpha, \beta}(Y | a, b)$.
-However, as the number of samples goes to infinity, the mean false positive and false negative rates go to $\fprate$ and $\fnrate$ respectively.
+We define the complementary rates $\fnrate = 1-\tprate$ (FNR) and $\tnrate = 1-\fprate$ (TNR) as shorthands that appear naturally in derived expressions.
+Special cases with only one type of error specified are written $\tilde{X}[\fprate][-]$ and $\tilde{X}[+][\tprate]$.
 
 Random \emph{positive} and \emph{negative} approximate sets are special cases respectively given by the following definitions.
 \begin{definition}
@@ -106,14 +87,26 @@ f(\tilde{X} | \alpha, \beta)
 f(\alpha | R) f(\beta | R).
 \end{equation}
 
-Every statistical property of the first-order random approximate set model is entailed by \cref{asm:fprate,asm:tprate}.
+Every statistical property of the second-order random approximate set model is entailed by \cref{def:sample_fprate,def:sample_tprate}.
 Furthermore, these assumptions generally hold in practice, e.g., the Bloom filter\cite{bf} and Perfect hash filter\cite{phf} are two separate implementations of the random positive approximate set in which these assumptions hold.
 
-Suppose the first-order random approximate sets are over the universal set $U$.
-Compositions of first-order random approximate sets over the Boolean algebra $(2^U,\cup,\SetIntersection,\SetComplement,\EmptySet,U)$, or random approximate sets of random approximate sets, are not closed over the \emph{first-order} model.
+\subsection{Abstract data type}
+\label{sec:adt}
+A data type $T$ that overloads the membership predicate $\SetContains : U \times T \mapsto \{0,1\}$ and has a value constructor $\ctor{\fprate}{\tprate} : 2^U \to T$ \emph{models} the Bernoulli set abstract data type if \cref{def:sample_fprate,def:sample_tprate} are satisfied, i.e.,
+\begin{equation}
+	\Prob{\SetContains[x][\ctor{\fprate}{\tprate}(A)] | \SetNotContains[x][A]} = \fprate
+\end{equation}
+and
+\begin{equation}
+	\Prob{\SetContains[x][\ctor{\fprate}{\tprate}(A)] | \SetContains[x][A]} = \tprate.
+\end{equation}
+Two data types that model Bernoulli sets with the same expected error rates are interchangeable in the frequentist sense: at the limit of repeated independent runs, they produce the same distribution over outcomes.
+
+Suppose the second-order random approximate sets are over the universal set $U$.
+Compositions of second-order random approximate sets over the Boolean algebra $(2^U,\cup,\SetIntersection,\SetComplement,\EmptySet,U)$, or random approximate sets of random approximate sets, are not closed over the \emph{second-order} model.
 These compositions are addressed in the higher-order model below.
 
-\subsection{Higher-order model}
+\subsection{Higher-order models and composition}
 \label{sec:higher_order_model}
 
 Composing \emph{random approximate sets} over the Boolean algebra $(\Sigma,\SetUnion,\SetIntersection,\SetComplement,\EmptySet,\Set{U})$, where $\Sigma \subseteq \PS{\Set{U}}$ since, for instance, if a \emph{deterministic} algorithm implements the model some elements in $\PS{\Set{U}}$ may not be reachable.
@@ -149,31 +142,38 @@ If we compose random approximate sets, then we have \emph{higher-order} random a
 \begin{definition}
 	The \emph{iterated} function $\Fun{f}^k$ is defined as $k$ compositions of $\Fun{f}$ where $\Fun{f}^0$ denotes the (non-random) \emph{identity} function.
 \end{definition}
-The composition $\left(\APFun{id}[\fprate][\tprate]\right)^k$ generates $k$-th order random approximate sets where the \emph{zero-th} order random approximation is the identity, i.e., $\left(\APFun{id}\right)^0 = \Fun{id}$.
+The composition $\left(\APFun{id}[\fprate][\tprate]\right)^k$ generates $k$-fold compositions of random approximate sets where the \emph{zero-th} order random approximation is the identity, i.e., $\left(\APFun{id}\right)^0 = \Fun{id}$.
 
 The function being approximated may take other forms, like \emph{set-complementation} or \emph{set-union}, e.g.,
 let $\SetUnion \colon \PS{\Set{X}} \times \PS{\Set{X}} \mapsto \PS{\Set{X}}$ be approximated by $\APFun{\SetUnion}[\fprate][\tprate] \colon \PS{\Set{X}} \times \PS{\Set{X}} \mapsto \PS{\Set{X}}$.
 Then, $\Set{A} \APFun{\SetUnion}[\fprate][\tprate] \Set{B}$ is a random approximate set of $\SetUnion[\Set{A}][\Set{B}]$ as before.
-However, $\APFun{\SetUnion}[\fprate'][\tprate'] \circ \APFun{id}[\fprate][\tprate]$ generates second-order random approximate sets.
+However, $\APFun{\SetUnion}[\fprate'][\tprate'] \circ \APFun{id}[\fprate][\tprate]$ generates two-fold compositions of random approximate sets.
 
 \begin{theorem}
-\label{thm:second_order}
-	Given a random approximate set $\ASet{A}[\fprate_1][\tprate_1]$, a random approximation of $\ASet{A}[\fprate_1][\tprate_1]$ with a false positive rate $\fprate_2$ and true positive rate $\tprate_2$ is a \emph{second-order} random approximate set of $\Set{A}$ with a false positive rate $\fprate = \fprate_1 \tprate_2 + \tnrate_1 \fprate_2$ and true positive rate $\tprate = \tprate_1 \tprate_2 + \fnrate_1 \fprate_2$, denoted by $\Set{A}^{\sigma^2}(\tprate,\fprate)$.
+\label{thm:twofold_composition}
+	Given a random approximate set $\ASet{A}[\fprate_1][\tprate_1]$, a random approximation of $\ASet{A}[\fprate_1][\tprate_1]$ with a false positive rate $\fprate_2$ and true positive rate $\tprate_2$ is a \emph{two-fold composition} approximating $\Set{A}$ with a false positive rate $\fprate = \fprate_1 \tprate_2 + \tnrate_1 \fprate_2$ and true positive rate $\tprate = \tprate_1 \tprate_2 + \fnrate_1 \fprate_2$, denoted by $\Set{A}^{\sigma^2}(\tprate,\fprate)$.
 
-	This result may be recursively applied to derive arbitrary $k$-th order random approximate sets as given by
+	This result may be recursively applied to derive arbitrary $k$-fold compositions as given by
 	\begin{equation}
 		\Set{A}^{\sigma^k} = \left(\Set{A}^{\sigma^{k-1}}\right)^{\sigma}
 	\end{equation}
 	where the \emph{zero-th} order $\Set{A}^{\sigma^0} = \Set{A}$.
 \end{theorem}
+\begin{proof}
+The result follows by applying \cref{thm:composition_rates} with inner
+rates $(\fprate_1, \tprate_1)$ and outer rates $(\fprate_2, \tprate_2)$.
+The recursive formula holds by induction: the base case $k = 0$ is the
+exact identity, and the inductive step applies \cref{thm:composition_rates}
+to the $k$-th order rates as inner parameters.
+\end{proof}
 
 In an \emph{algebra of sets} $(\PS{\Set{U}}, \SetIntersection, \SetUnion, \SetComplement, \Set{U}, \EmptySet)$, we may compose sets to form new sets.
 When these sets model \emph{random approximate sets}, then their compositions model \emph{higher-order} random approximate sets, e.g.,
 $\SetUnion[\ASet{A}[\fprate_1][\tprate_1]][\ASet{B}[\fprate_2][\tprate_2]]$
-models a higher-order random approximate set which does not obey the first-order model; rather, it partitions the negative set such that each partition may have a different false positive rate and similarly for the positive set.
+models a higher-order random approximate set which does not obey the second-order model; rather, it partitions the negative set such that each partition may have a different false positive rate and similarly for the positive set.
 
 This contrasts with $\AT{\left(\SetUnion[\Set{A}][\Set{B}]\right)}[\fprate][\tprate]$, in which the false positive rate for the negative elements are uniformly distributed and likewise for the positive elements.
-We call these random approximate sets \emph{first-order} approximations.
+We call these random approximate sets \emph{second-order} approximations.
 For completeness, the \emph{zeroth-order} are the objective sets, e.g., the zeroth-order approximation of $\SetUnion[\Set{A}][\Set{B}]$ is $\SetUnion[\Set{A}][\Set{B}]$.
 The complexity of the probabilistic model increases as the order increases.
 
@@ -194,21 +194,19 @@ The random approximate set model given $R = Y$ is given by the \emph{probability
 \end{equation}
 where $\Omega$ is the \emph{sample space}, $\PS{\Omega}$ is the set of all events, and $P : \PS{\Omega} \mapsto [0,1]$ is the probability set function.
 
+\begin{remark}[Latent and observed sets]
+\label{rem:latent_observed}
+The Bernoulli set model induces a duality between the \emph{latent} (objective) set $A$
+and the \emph{observed} (approximate) set $\tilde{A}$.
+Given the error model, the observed set constrains the possible latent sets.
+For instance, if $\tilde{A}$ is a positive approximate set ($\fnrate = 0$),
+then $A \subseteq \tilde{A}$: every element of $\tilde{A}$ is either a true positive
+or a false positive, so the latent set must be a subset of the observed set.
+Conversely, elements absent from $\tilde{A}$ are certainly absent from $A$.
+\end{remark}
 
-%The \emph{probability space} of random approximate sets given an 
-%objective set
-%$\Set{Y} \subset \Set{U}$ is given by the triple
-%\begin{equation}%
-%	\left(\vec{1}, \{0,1\}^u, \Prob{\;\cdot | \vec{y}}\right)
-%\end{equation}
-%The relative frequency of any event $\vec{x}$ in $\{0,1\}^u$ converges to $\Prob{\AVec{X} = \vec{x} | \OVec{y}}$ as the number of times the random approximate set of $\OVec{y}$ is generated goes to infinity.
 
-%%By \cref{def:bijection}, we use the Boolean algebras
-%%$\left(
-%%\PS{\Set{U}},\SetIntersection,\cup,\SetComplement,\EmptySet,\Set{U}
-%%\right)$ and $(\{0,1\}^u,\land,\lor,\neg,\vec{0},\vec{1})$ interchangeably.
-
-Consider an objective set $A$ and a random approximate set  and suppose we are uncertain about which elements are their respective members.
+Consider an objective set $A$ and a random approximate set $\tilde{A}$ of $A$, and suppose we are uncertain about which elements are their respective members.
 We model the uncertainty of the elements of $A$ by the Boolean random vector $\vec{A} = \Tuple{\RV{A_1},\ldots,\RV{A_u}}$ where $\RV{A_j} = \SetIndicator{A}\left(x_{(j)}\right)$ for $j=1,\ldots,u$.
 Similarly, we model the uncertainty of the elements of the $\tilde{A}$ by $\tilde{\vec{A}}^\fprate_\tprate = \Tuple{\tilde{A}_1,\ldots,\tilde{A}_u}$.
 
@@ -219,7 +217,7 @@ By the axioms of probability, the joint probability may be rewritten as
         \Prob{\tilde{\vec{A}}^\fprate_\tprate = \vec{x} | \vec{A} = \vec{y}}
         \Prob{\vec{A} = \vec{y}}.
 \end{equation}
-By \cref{asm:fprate,asm:tprate}, $\tilde{A}_j$ is only dependent on 
+By \cref{def:sample_fprate,def:sample_tprate}, $\tilde{A}_j$ is only dependent on 
 $\RV{A_j}$ for $j=1,\ldots,u$ and thus by the axioms of probability
 \begin{equation}
     \Prob{\tilde{\vec{A}}^\fprate_\tprate = \vec{x},\vec{A} = \vec{y}} = 
@@ -238,43 +236,34 @@ where $\fprate = \Prob{\tilde{A}_j=1 | \RV{A_j}=0}$ and $\tprate = \Prob{\tilde{
 
 The relative frequency of any event $\vec{x}$ in $\{0,1\}^u$ converges to $\Prob{\tilde{\vec{X}} = \vec{x} | \tilde{\vec{y}}}$ as the number of times the random approximate set of $\tilde{\vec{y}}$ is generated goes to infinity.
 
-%The relative frequency of any event $\vec{x}$ in $\{0,1\}^u$ converges to 
-%$\Prob{\tilde{\vec{X}} = \vec{x} | \OVec{y}}$ as the number of times the 
-%algorithm is applied to the objective set $\OVec{y}$ is repeated goes to 
-%infinity.
-
-%The sample space (the set of mutually exclusive outcomes
-%that may be observed) is given by some subset of $\PS{\Set{U}}$. Sets of 
-%outcomes are denoted events where an event that contains one outcome is 
-%elementary event and the event containing all outcomes is the sample space 
-%$\PS{\Set{U}}$.
-
-%Suppose we an objective set $\Set{S}$ and $n$ approximations drawn from
-%$\ASet{S}(\fprate,\tprate)$, denoted by $\ASet{S}(\fprate = \fprateob_j,
-%\tprate = \tprateob_j)$ for $j=1,\ldots,n$.
-
-%The \emph{distribution} of false positive rates 
-%$\fprateob_1,\ldots,\fprateob_n$ for a sample of $n$ approximate sets 
-%$\ASet{S}[1],\ldots,\ASet{S}[n]$, where each is said to have an 
-%\emph{expected} false positive rate $\fprate$, has a central tendency 
-%around $\fprate$. The same is true for the true positive rate 
-%$\tprate$.
 
 
 Consider the following example.
-\begin{example}
-	Suppose the universal set is $\{ x_1,x_2 \}$ and consider the distribution of the Bernoulli set $\tilde{\{x_1\}}^\fprate_\fnrate$. The probability mass function $p_{\tilde{\{x_1\}}^\fprate_\fnrate}$ is given by
+\begin{example}[Boolean universe]
+\label{ex:boolean_universe}
+	Let the universal set be $U = \{\top, \bot\}$ (the Boolean values \emph{true} and \emph{false}) and let the objective set be $A = \{\top\}$.
+	A Bernoulli set $\tilde{A}^\fprate_\tprate$ over this universe has four possible outcomes, enumerated by the probability mass function
 	\begin{equation}
-	p_{\tilde{\{x_1\}}^\fprate_\fnrate}(\Set{X}) =
-	\begin{cases} 
-	\fnrate (1-\fprate) & \Set{X} = \EmptySet,\\
-	\fnrate \fprate     & \Set{X} = \{x_2\},\\
-	(1-\fnrate)(1-\fprate)     & \Set{X} = \{x_1\},\\
-	(1-\fnrate)\fprate         & \Set{X} = \{x_1,x_2\}.
+	p_{\tilde{A}^\fprate_\tprate}(\Set{X}) =
+	\begin{cases}
+	\fnrate \cdot \tnrate & \Set{X} = \EmptySet,\\
+	\fnrate \cdot \fprate & \Set{X} = \{\bot\},\\
+	\tprate \cdot \tnrate & \Set{X} = \{\top\},\\
+	\tprate \cdot \fprate & \Set{X} = \{\top, \bot\}.
 	\end{cases}
 	\end{equation}
+	The outcome $\Set{X} = \{\top, \bot\}$ means both a true positive ($\top \in \tilde{A}$) and a false positive ($\bot \in \tilde{A}$) occurred.
+	The outcome $\Set{X} = \{\bot\}$ means a false positive and a false negative occurred simultaneously.
+	In the positive approximate set ($\fnrate = 0$), only $\Set{X} \in \{\{\top\}, \{\top, \bot\}\}$ are reachable, so $A \subseteq \tilde{A}$ with certainty.
 \end{example}
 
-The true set, call it $\Set{A}$, being modeled is latent, and we observe a sample from the Bernoulli set $\tilde{\Set{A}}$, i.e., $\tilde{\Set{A}}$ is a random set. As sets, most operations we can perform on $\Set{A}$ are also valid on $\tilde{\Set{A}}$, but operations on $\tilde{\Set{A}}$ will not necessarily yield the same results as operations on $\Set{A}$. We call this the approximation error, and different operations will yield different approximation errors. For example, $\Pr\{\Set{A} = \tilde{\Set{A}}\}$ is the probability that the approximation $\tilde{\Set{A}}$ is equal to the true set $\Set{A}$. This is a function of the Bernoulli model, and in theory each element in $\Set{U}$ may have a different error rate. We denote the number of parameters required to specify the error rate of the Bernoulli model as the \emph{order} of the Bernoulli model.
+\begin{remark}[Membership tests as Bernoulli Booleans]
+\label{rem:membership_boolean}
+For a Bernoulli set over an arbitrary universe $U$, the membership test $x \in \tilde{A}$ returns a Boolean value that is itself a Bernoulli approximation of the latent answer $x \in A$.
+Consider a positive approximate set such as a Bloom filter, where $\fnrate = 0$.
+If we query an element $x$ and observe $x \in \tilde{A}_+$, the result may be a false positive: $x$ might not belong to the latent set $A$.
+If we observe $x \notin \tilde{A}_+$, the result is certainly a true negative: $x \notin A$.
+Thus each membership query projects the set-level Bernoulli model onto the Boolean universe of \cref{ex:boolean_universe}, yielding a single Bernoulli Boolean whose error structure is inherited from the underlying set.
+\end{remark}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

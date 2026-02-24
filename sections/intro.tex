@@ -29,18 +29,19 @@ The framework is formulated as an abstract data type: any implementation whose m
 
 \paragraph{Related work.}
 The original Bloom filter~\cite{bf} introduced approximate set membership with one-sided error.
-Subsequent work has produced a rich family of probabilistic data structures with improved space efficiency or additional functionality, but analyses typically treat each structure in isolation.
+Subsequent work has produced a rich family of probabilistic data structures---including cuckoo filters~\cite{cuckooFilter} and many variants surveyed by Broder and Mitzenmacher~\cite{broderMitzenmacher}---with improved space efficiency or additional functionality.
+However, analyses typically treat each structure in isolation, deriving error rates for a single filter rather than for compositions of filters.
+General probabilistic methods for randomized algorithms~\cite{mitzenmacherUpfal} provide the analytical toolkit (concentration inequalities, entropy bounds) but do not address the compositional structure of approximate sets.
 The interval arithmetic approach to uncertain parameters~\cite{basicinterval} addresses a related but distinct problem: propagating uncertainty through arithmetic expressions rather than set-theoretic ones.
 Our framework complements these lines of work by providing an algebraic layer that sits above any particular implementation.
 
 \paragraph{Organization.}
 \Cref{sec:setalgebra} reviews the algebra of sets.
-\Cref{sec:asets} introduces the Bernoulli set model and its axioms, including the higher-order composition theorem.
+\Cref{sec:bernoulli_model} introduces the Bernoulli set model and its axioms, including the higher-order composition theorem.
 \Cref{sec:characteristics} derives the probability distributions of fundamental binary classification measures.
 \Cref{sec:set_theory} derives error rates for all four set-theoretic operations and establishes closure properties.
 \Cref{sec:relational} treats relational predicates (subset, equality) on Bernoulli sets.
 \Cref{sec:intervals} addresses uncertain rate parameters via interval arithmetic.
-\Cref{sec:adt} formulates the Bernoulli set as an abstract data type with space complexity bounds.
-\Cref{sec:entropy} derives the joint entropy of error counts.
+\Cref{sec:entropy} derives the joint entropy of error counts and establishes space complexity bounds.
 \Cref{sec:algebraic_structure} examines the algebraic structure (commutative monoids) of approximate sets.
 \Cref{sec:bool_search} demonstrates the framework through an application to encrypted Boolean search.
