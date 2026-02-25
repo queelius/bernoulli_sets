@@ -59,35 +59,38 @@ where $\tilde{X}$ has a false positive rate $\fprate_1$ and a true positive rate
 \end{proof}
 
 \begin{corollary}
+\label{cor:equality_prob}
 Given $X = Y$, $\tilde{X}[\fprate_1][\tprate_1] = \tilde{Y}[\fprate_2][\tprate_2]$ with probability
 \begin{equation}
-\left(1 - \tprate_1\fnrate_2\right)^{|X|}
-\left(1 - \fprate_1\tnrate_2\right)^{|U| - |X|}
-\left(1 - \tprate_2\fnrate_1\right)^{|X|}
-\left(1 - \fprate_2\tnrate_1\right)^{|U| - |X|}.
+\left(\tprate_1\tprate_2 + \fnrate_1\fnrate_2\right)^{|X|}
+\left(\fprate_1\fprate_2 + \tnrate_1\tnrate_2\right)^{|U| - |X|}.
 \end{equation}
 \end{corollary}
 \begin{proof}
-By \cref{def:eq_pred}, $\tilde{X} = \tilde{Y}$ if and only if $\tilde{X} \subseteq \tilde{Y}$ and $\tilde{Y} \subseteq \tilde{X}$.
-Since these events are independent (they depend on distinct error events), the probability is
-\begin{equation}
-	\Prob{\tilde{X} \subseteq \tilde{Y} \mid X = Y} \cdot \Prob{\tilde{Y} \subseteq \tilde{X} \mid Y = X}.
-\end{equation}
-Setting $|X| = |Y|$ in the subset theorem eliminates the middle factor ($|Y| - |X| = 0$), and the result follows.
+$\tilde{X} = \tilde{Y}$ holds if and only if $\mathbf{1}_{\tilde{X}}(j) = \mathbf{1}_{\tilde{Y}}(j)$ for every $j \in U$.
+By element-wise independence across elements, the probability is
+$\prod_{j \in U} P(\mathbf{1}_{\tilde{X}}(j) = \mathbf{1}_{\tilde{Y}}(j))$.
+Since $X = Y$, the universe partitions into two blocks:
+\begin{itemize}
+	\item $j \in X$: both indicators are independent Bernoulli trials with success probabilities $\tprate_1$ and $\tprate_2$ respectively, so they agree with probability $\tprate_1\tprate_2 + \fnrate_1\fnrate_2$.
+	\item $j \notin X$: both indicators have success probabilities $\fprate_1$ and $\fprate_2$, so they agree with probability $\fprate_1\fprate_2 + \tnrate_1\tnrate_2$.
+\end{itemize}
+Since each block contributes a constant factor per element, the product reduces to the stated formula.
 \end{proof}
 
 
 \begin{corollary}
 	Given $X = Y$, $\tilde{X}^\fprate_\tprate = \tilde{Y}^\fprate_\tprate$ with probability
 	\begin{equation}
-	\left(1 - \tprate\fnrate\right)^{2|X|}
-	\left(1 - \fprate\tnrate\right)^{2(|U| - |X|)}.
+	\left(\tprate^2 + \fnrate^2\right)^{|X|}
+	\left(\fprate^2 + \tnrate^2\right)^{|U| - |X|}.
 	\end{equation}
 \end{corollary}
 \begin{proof}
 Set $\fprate_1 = \fprate_2 = \fprate$ and $\tprate_1 = \tprate_2 = \tprate$
-in the preceding corollary. Since $X = Y$, the exponents $|X|+|Y| = 2|X|$
-and $2|U|-|X|-|Y| = 2(|U|-|X|)$.
+in the preceding corollary: the positive-block factor becomes
+$\tprate^2 + \fnrate^2$ and the negative-block factor becomes
+$\fprate^2 + \tnrate^2$.
 \end{proof}
 
 

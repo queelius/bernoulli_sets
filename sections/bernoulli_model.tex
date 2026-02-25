@@ -29,7 +29,7 @@ A first-order model ($n = 1$) assigns a single error rate to all elements (symme
 A second-order model ($n = 2$) distinguishes positives from negatives with rates $\tprate$ and $\fprate$ respectively.
 In general, an $n$-th order model partitions $U$ into $n$ blocks, each with its own error rate; the maximum order is $|U|$.
 \end{definition}
-In the second-order (positive-negative) model, $n = 2$: the partition is $\{R, R^c\}$ with block error rates $\alpha_1 = \beta$ (true positive rate on positives) and $\alpha_2 = \alpha$ (false positive rate on negatives).
+In the second-order (positive-negative) model, $n = 2$: the partition is $\{R, R^c\}$ with block response rates $\alpha_1 = \beta$ (response rate on positives, i.e., true positive rate) and $\alpha_2 = \alpha$ (response rate on negatives, i.e., false positive rate).
 \begin{axiom}[Conditional independence of block error rates]
 \label{asm:fpr_fnr_r_indep}
 Given the objective set $R$, the random error rates $\alpha_1, \ldots, \alpha_n$ for the respective partition blocks $B_1, \ldots, B_n$ are mutually independent.
@@ -109,7 +109,7 @@ These compositions are addressed in the higher-order model below.
 \subsection{Higher-order models and composition}
 \label{sec:higher_order_model}
 
-Composing \emph{random approximate sets} over the Boolean algebra $(\Sigma,\SetUnion,\SetIntersection,\SetComplement,\EmptySet,\Set{U})$, where $\Sigma \subseteq \PS{\Set{U}}$ since, for instance, if a \emph{deterministic} algorithm implements the model some elements in $\PS{\Set{U}}$ may not be reachable.
+We compose \emph{random approximate sets} over the Boolean algebra $(\Sigma,\SetUnion,\SetIntersection,\SetComplement,\EmptySet,\Set{U})$, where $\Sigma \subseteq \PS{\Set{U}}$ because a deterministic implementation may not reach every element of $\PS{\Set{U}}$.
 As a result, to satisfy the identity and complementation axioms required by Boolean algebras, we make $\EmptySet$ and $\Set{U}$ available in the model as special cases.
 \begin{remark}
 	Alternatively, these axioms may be satisfied by making the empty set and the universal set \emph{degenerate} cases, i.e., $\Prob{\ASet{\EmptySet} = \EmptySet} = 1$ and $\Prob{\ASet{U} = \Set{U}} = 1$.
