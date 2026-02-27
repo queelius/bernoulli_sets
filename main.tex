@@ -9,7 +9,6 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{graphicx}
 \graphicspath{{img/}}
-\usepackage[noend]{algorithm2e}
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{booktabs}
@@ -75,7 +74,7 @@ We introduce the \emph{Bernoulli set model}, a compositionally closed probabilis
 The central property of the model is \emph{rate computability}: every set-theoretic operation (complement, union, intersection, difference) on Bernoulli sets yields a (possibly higher-order) Bernoulli set whose error rates are closed-form functions of the operand rates and set cardinalities, and this computability extends to arbitrary compositions.
 From two axioms---element-wise independence and conditional independence of error rates---we derive the probability distributions of all standard binary classification measures (precision, recall, etc.), the joint entropy of error counts, and the monoidal structure of approximate sets under union and intersection.
 The framework unifies the analysis of probabilistic data structures such as Bloom filters and perfect hash filters: any implementation satisfying the Bernoulli axioms inherits the full theory as an abstract data type.
-We demonstrate this compositionality through an application to encrypted Boolean search, where showing that result sets are Bernoulli sets immediately yields all performance guarantees.
+An interval arithmetic extension propagates uncertain rates through set operations, yielding guaranteed bounds on output error rates.
 \end{abstract}
 
 \microtypesetup{protrusion=false}
@@ -90,7 +89,7 @@ We demonstrate this compositionality through an application to encrypted Boolean
 \input{sections/relational}
 \input{sections/uncertain_rates}
 \input{sections/entropy}
-\input{sections/bool_search}
+
 
 \input{sections/conclusion}
 

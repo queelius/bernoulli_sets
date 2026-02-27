@@ -22,7 +22,7 @@ From these axioms we derive:
     \item the probability distributions of all standard binary classification measures (precision, recall, accuracy, etc.),
     \item closed-form error rates for complement, union, intersection, and set difference, together with the monoidal structure they induce,
     \item the joint entropy of error counts, and
-    \item an application to encrypted Boolean search in which compositionality yields all performance guarantees.
+    \item an interval arithmetic extension that propagates uncertain rates through set operations.
 \end{enumerate}
 The framework is formulated as an abstract data type: any implementation whose membership queries satisfy the Bernoulli axioms---including Bloom filters, perfect hash filters, and their compositions---inherits the full theory automatically.
 
@@ -44,4 +44,3 @@ Our framework complements these lines of work by providing an algebraic layer th
 \Cref{sec:relational} treats relational predicates (subset, equality) on Bernoulli sets.
 \Cref{sec:intervals} develops interval arithmetic for uncertain rate parameters.
 \Cref{sec:entropy} derives the joint entropy of error counts and establishes space complexity bounds.
-\Cref{sec:bool_search} demonstrates the framework through an application to encrypted Boolean search.

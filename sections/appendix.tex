@@ -268,14 +268,3 @@ A general approach to estimating $\RV{\overline{Y}_m}$ is given by generating a 
   \item $\NEG$ --- Random variable for the number of negatives, $\NEG = u - \POS$
 \end{itemize}
 
-\subsection{Boolean Search (Section~\ref{sec:bool_search})}
-\begin{itemize}
-  \item $\Set{K}$ --- Set of search keys
-  \item $\Set{D}$ --- Set of documents
-  \item $Q$ --- Boolean algebra of queries over $\PS{\Set{K}}$
-  \item $\operatorname{facts}(d)$ --- Search index mapping document $d$ to a subset of $\Set{K}$
-  \item $\operatorname{find}(q)$ --- Boolean algebra homomorphism mapping query $q$ to its result set
-  \item $\operatorname{find}^\sigma(q)$ --- Approximate find function operating on approximate set indexes
-  \item $\operatorname{encrypted\_find}(q)$ --- Encrypted find composition $\operatorname{find}^\sigma \circ H$
-  \item $\operatorname{h} \colon \BitSet^* \to \BitSet^k$ --- Cryptographic hash function mapping keys to trapdoors
-\end{itemize}

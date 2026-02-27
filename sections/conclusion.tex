@@ -9,7 +9,7 @@ We have developed the Bernoulli set model, a compositionally closed probabilisti
 The central contribution is \emph{closure}: the error rates of any set-theoretic expression---complement, union, intersection, difference---are closed-form functions of the operand rates and set cardinalities, and this closure extends to higher-order compositions via the recursive $k$-fold composition theorem.
 From two axioms (element-wise independence and conditional independence of block error rates), we derived the probability distributions of all standard binary classification measures, the joint entropy of error counts, and the monoidal structure of approximate sets under union and intersection.
 The framework is formulated as an abstract data type, so any implementation satisfying the Bernoulli axioms---Bloom filters, perfect hash filters, or their compositions---inherits the full theory.
-We demonstrated this compositionality through an application to encrypted Boolean search.
+An interval arithmetic extension propagates uncertain rates through set operations, yielding guaranteed bounds when parameters are only approximately known.
 
 \paragraph{Practical implications.}
 The abstract data type formulation means that the results of this paper apply automatically to any implementation whose membership queries satisfy element-wise independence.
