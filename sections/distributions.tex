@@ -57,7 +57,7 @@ with an expectation $\fprate$, variance $\fprate(1-\fprate) / n$, and probabilit
 \begin{equation}
 	p_{\alpha_n}(\fprateob | \fprate) = p_{\FP_n}(\fprateob n | \fprate)
 \end{equation}
-over the support $\SetBuilder{ \frac{j}{n} \in \BlackboardSet{Q}}{j \in \{0,\ldots,n\}}$.
+over the support $\SetBuilder{ \frac{j}{n} \in \RatSet}{j \in \{0,\ldots,n\}}$.
 \end{theorem}
 \begin{proof}
 By \cref{def:fprate}, the false positive rate is given by the ratio of the number of false positives to the total number of negatives.
@@ -287,7 +287,7 @@ The positive predictive value of random approximate sets is a random variable gi
 	\begin{equation}
 	\PPV = \frac{\TP_{\p}}{\TP_{\p} + \FP_{\n}}
 	\end{equation}
-	with an \emph{expectation} given \emph{approximately} by (a second-order Taylor expansion of $\Expect{\TP_\p / (\TP_\p + \FP_\n)}$ about the means, valid when $\p\tprate$ and $\n\fprate$ are both large; the error is $\mathcal{O}(1/\min(\p,\n)^2)$)
+	with an \emph{expectation} given \emph{approximately} by the second-order delta method~\cite{casellaBerger} (a Taylor expansion of $\Expect{\TP_\p / (\TP_\p + \FP_\n)}$ about the means, valid when $\p\tprate$ and $\n\fprate$ are both large; the error is $\mathcal{O}(1/\min(\p,\n)^2)$)
 	\begin{equation}
 	\label{eq:approx_expected_precision}
 	\ppv(\tprate, \fprate, \p, \n) \approx 

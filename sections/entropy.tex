@@ -24,8 +24,10 @@ is
     + \frac{1}{2}\log_2\!\bigl(
         (u - m) \cdot m \cdot \fprate(1-\fprate) \cdot \fnrate(1-\fnrate)
       \bigr)
-    + \mathcal{O}\!\left(\frac{u}{m(u-m)}\right).
+    + \mathcal{O}\!\left(\frac{u}{m(u-m)}\right),
 \end{equation}
+where the asymptotic term holds as $u \to \infty$ with $m/u$ bounded away
+from $0$ and $1$ (so that both $m$ and $u - m$ grow with $u$).
 \end{theorem}
 \begin{proof}
 By \cref{asm:element_indep}, the random error counts $\FP_m$ and $\FN_m$
@@ -122,11 +124,11 @@ The lower-bound on the \emph{expected} space complexity of a data structure that
 We restate it here in the notation of the present paper and include a proof for completeness.
 \begin{proposition}[{\cite{carterExact}}]
 \label{pst:approx_l_b}
-The \emph{information-theoretic lower-bound}\index{information-theoretic lower-bound} of a data structure that implements the countably infinite \emph{positive random approximate set} abstract data type has an \emph{expected} bit length given by
+The \emph{information-theoretic lower-bound} of a data structure that implements the countably infinite \emph{positive random approximate set} abstract data type has an \emph{expected} bit length given by
 \begin{equation}
     -\log_2 \fprate \; \si{bits \per element},
 \end{equation}
-where $\fprate > 0$ is the false positive rate\index{false positive rate}.
+where $\fprate > 0$ is the false positive rate.
 \end{proposition}
 \begin{proof}
 It suffices to prove the bound for deterministic encodings; the extension to randomized data structures follows from Yao's minimax principle.

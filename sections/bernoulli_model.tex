@@ -66,8 +66,13 @@ and
 By \cref{asm:element_indep}, for any single element $x \notin A$,
 $\Prob{\mathbf{1}_{\tilde{A}}(x) = 1} = \fprate$, and for $x \in A$,
 $\Prob{\mathbf{1}_{\tilde{A}}(x) = 1} = \tprate$.
-The expected sample rates satisfy $E[\alpha] = \fprate$ and $E[\beta] = \tprate$.
+The expected sample rates satisfy $\Expect{\alpha} = \fprate$ and $\Expect{\beta} = \tprate$.
 \end{proposition}
+\begin{proof}
+By linearity of expectation and \cref{asm:element_indep},
+$\Expect{\alpha} = \frac{1}{|A^c|}\sum_{x \notin A} \Prob{\mathbf{1}_{\tilde{A}}(x) = 1} = \fprate$
+and similarly $\Expect{\beta} = \frac{1}{|A|}\sum_{x \in A} \Prob{\mathbf{1}_{\tilde{A}}(x) = 1} = \tprate$.
+\end{proof}
 
 
 
