@@ -26,17 +26,29 @@ In our case, the formulae are simple enough to ensure dependencies are satisfied
 
 \begin{example}
 	Suppose we wish to determine the expected accuracy given that the proportion of positives $\lambda$ is known to be some value in the interval $[\lambda]$, and that the false positive and false negative rates lie in $[\fprate]$ and $[\fnrate]$ respectively.
-	By the accuracy formula $\acc = \lambda(1-\fnrate) + (1-\lambda)(1-\fprate)$, the expected accuracy is some value in the interval
+	The accuracy formula $\acc = \lambda(1-\fnrate) + (1-\lambda)(1-\fprate)$ may be rewritten as
 	\begin{equation}
-		\acc([\fprate],[\fnrate] ; [\lambda]) =
-		\biggl[
-		\overline{\lambda}(1-\overline{\fnrate}) +
-		(1-\overline{\lambda})(1-\overline{\fprate}),\;
-		\underline{\lambda}(1-\underline{\fnrate}) +
-		(1-\underline{\lambda})(1-\underline{\fprate})
-		\biggr],
+		\acc = (1-\fprate) + \lambda(\fprate - \fnrate).
 	\end{equation}
-	where the lower bound is attained at the worst-case rates $(\overline{\fprate}, \overline{\fnrate}, \overline{\lambda})$ and the upper bound at the best-case rates $(\underline{\fprate}, \underline{\fnrate}, \underline{\lambda})$.
+	Since the accuracy is multilinear in $(\fprate, \fnrate, \lambda)$, its extremes over the box $[\fprate] \times [\fnrate] \times [\lambda]$ are attained at vertices.
+	The formula is decreasing in $\fprate$ and $\fnrate$, but its monotonicity in $\lambda$ depends on the sign of $\fprate - \fnrate$:
+	\begin{itemize}
+		\item If $\fprate \geq \fnrate$ (the common case, e.g., Bloom filters), accuracy increases in $\lambda$, so:
+		\begin{equation}
+			\acc \in \bigl[
+			(1-\overline{\fprate}) + \underline{\lambda}(\overline{\fprate} - \overline{\fnrate}),\;
+			(1-\underline{\fprate}) + \overline{\lambda}(\underline{\fprate} - \underline{\fnrate})
+			\bigr].
+		\end{equation}
+		\item If $\fprate < \fnrate$, accuracy decreases in $\lambda$, so the $\lambda$ endpoints are reversed:
+		\begin{equation}
+			\acc \in \bigl[
+			(1-\overline{\fprate}) + \overline{\lambda}(\overline{\fprate} - \overline{\fnrate}),\;
+			(1-\underline{\fprate}) + \underline{\lambda}(\underline{\fprate} - \underline{\fnrate})
+			\bigr].
+		\end{equation}
+	\end{itemize}
+	In practice, guaranteed bounds are obtained by evaluating the accuracy at all $2^3 = 8$ vertices and taking the minimum and maximum.
 \end{example}
 
 We may not be interested in the \emph{expected} value, but the smallest set of values such that with probability $1-\gamma$ the true rate
@@ -47,19 +59,21 @@ The common notion of the \emph{confidence interval} is a product of the probabil
 We may use \emph{interval arithmetic} and replace point values with interval values, point values being a degenerate case.
 Basic interval arithmetic is presented in~\cite{basicinterval}; the foundational treatment is due to Moore~\cite{mooreInterval}.
 
-A set sampled from $\tilde{A}[\fprate][\tprate]$ is an approximate set such that the $(1-\gamma)\cdot 100\%$ asymptotic confidence intervals for the realized false negative and false positive rates are respectively given by
+A set sampled from $\tilde{A}[\fprate][\tprate]$ is an approximate set such that the $\gamma\cdot 100\%$ asymptotic confidence intervals for the realized false negative and false positive rates are respectively given by
 \begin{equation}
-\Interval{\fnrate} = \fnrate \pm \sqrt{\frac{\fnrate(1-\fnrate)}{p}}\, \Phi^{-1}\!\left(\frac{\gamma}{2}\right)
+\Interval{\fnrate} = \fnrate \pm \sqrt{\frac{\fnrate(1-\fnrate)}{p}}\, \Phi^{-1}\!\left(\frac{1+\gamma}{2}\right)
 \end{equation}
 and
 \begin{equation}
-\Interval{\fprate} = \fprate \pm \sqrt{\frac{\fprate(1-\fprate)}{n}}\, \Phi^{-1}\!\left(\frac{\gamma}{2}\right),
+\Interval{\fprate} = \fprate \pm \sqrt{\frac{\fprate(1-\fprate)}{n}}\, \Phi^{-1}\!\left(\frac{1+\gamma}{2}\right),
 \end{equation}
 where $p$ and $n$ are the number of positives and negatives respectively and $\Phi^{-1}$ is the inverse CDF of the standard normal (see \cref{eq:conf_fpr,eq:conf_tpr}).
 
 \subsection{Interval propagation through set operations}
 
-The error-rate formulas of \cref{sec:set_theory} are monotone in the input rates, so replacing point-valued rates with intervals and evaluating at the appropriate endpoints yields guaranteed bounds on the output rates.
+The simple error-rate formulas---union FPR, intersection FNR, and complement---are monotonically increasing in each input rate.
+The weighted formulas (union FNR, intersection FPR, and set difference rates) have \emph{mixed monotonicity}: they increase in same-type rates ($\fnrate$ in $\fnrate$, $\fprate$ in $\fprate$) and decrease in cross-type rates ($\fnrate$ in $\fprate$, $\fprate$ in $\fnrate$).
+Replacing point-valued rates with intervals and evaluating at the appropriate endpoints for each variable yields guaranteed bounds on the output rates.
 
 \begin{theorem}[Complement]
 \label{thm:uncertain_rates_comp_set}
@@ -77,7 +91,7 @@ Given two approximate sets with interval-valued rates $[\fprate_1]$, $[\fnrate_1
              1 - (1 - \overline{\fprate}_1)(1 - \overline{\fprate}_2)\bigr],
 \end{equation}
 since the union FPR formula $\fprate = 1 - (1-\fprate_1)(1-\fprate_2)$ from \cref{thm:union_fprate} is monotonically increasing in both $\fprate_1$ and $\fprate_2$.
-The false negative rate of the union is bounded by evaluating \cref{eq:union_fnr} at the worst-case and best-case endpoints of $[\fnrate_1]$, $[\fnrate_2]$, $[\fprate_1]$, and $[\fprate_2]$ respectively.
+Since the union FNR (\cref{eq:union_fnr}) increases in $\fnrate_1, \fnrate_2$ and decreases in $\fprate_1, \fprate_2$, the upper bound is attained at $(\overline{\fnrate}_1, \overline{\fnrate}_2, \underline{\fprate}_1, \underline{\fprate}_2)$ and the lower bound at $(\underline{\fnrate}_1, \underline{\fnrate}_2, \overline{\fprate}_1, \overline{\fprate}_2)$.
 \end{theorem}
 
 \begin{remark}

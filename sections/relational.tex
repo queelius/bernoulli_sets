@@ -31,7 +31,7 @@ where $\tilde{X}$ has a false positive rate $\fprate_1$ and a true positive rate
 \begin{proof}
 	$\tilde{X} \subseteq \tilde{Y}$ holds if and only if, for every element $j \in U$, $j \in \tilde{X}$ implies $j \in \tilde{Y}$.
 	Equivalently, the event $j \in \tilde{X} \land j \notin \tilde{Y}$ must not occur for any $j$.
-	By element-wise independence, the probability is
+	By element-wise independence and cross-set independence (\cref{asm:cross_set_indep}), the probability is
 	\begin{equation}
 	\gamma = \prod_{j=1}^{u} \left(1 - \Prob{j \in \tilde{X}} \Prob{j \notin \tilde{Y}}\right),
 	\end{equation}

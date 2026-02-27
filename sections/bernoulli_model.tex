@@ -37,9 +37,10 @@ Given the objective set $R$, the random error rates $\alpha_1, \ldots, \alpha_n$
 \end{axiom}
 For instance, in the second-order model, the random false positive rate $\alpha$ and the random true positive rate $\beta$ are conditionally independent given $R$.
 
-\begin{remark}[Relation to the binary symmetric channel]
+\begin{remark}[Relation to binary channels]
 \label{rem:bsc}
-At the per-element level, the Bernoulli set model is a collection of independent binary symmetric channels~\cite{shannonBSC}; equivalently, each element undergoes Warner's randomized response~\cite{warner1965}. For each $x \in U$, the indicator $\mathbf{1}_{\tilde{A}}(x)$ is the output of a BSC with crossover probability $\fprate$ (if $x \notin A$) or $\fnrate$ (if $x \in A$).
+At the per-element level, the Bernoulli set model is a collection of independent binary channels~\cite{shannonBSC}; equivalently, each element undergoes Warner's randomized response~\cite{warner1965}. For each $x \in U$, the indicator $\mathbf{1}_{\tilde{A}}(x)$ is the output of a binary channel with crossover probability $\fprate$ (if $x \notin A$) or $\fnrate$ (if $x \in A$).
+When $\fprate = \fnrate$ (the first-order model), this reduces to a binary \emph{symmetric} channel (BSC); in general, the channel is asymmetric.
 The novelty of the present framework is not the per-element channel model, which is classical, but the \emph{set-level} compositional algebra: the derivation of error rates for union, intersection, complement, and their higher-order compositions over collections of such channels.
 \end{remark}
 
@@ -141,6 +142,7 @@ If we compose random approximate sets, then we have \emph{higher-order} random a
 \begin{theorem}
 \label{thm:composition_rates}
 	The composition of random approximate identity functions $\APFun{id}[\fprate][\tprate] \circ \APFun{id}[\fprate'][\tprate']$ generates random approximate sets with a true positive rate $\tprate' \tprate + \fnrate' \fprate$ and false positive rate $\fprate' \tprate + \tnrate' \fprate$.
+	This is the standard product of binary channel transition matrices~\cite{coverThomas}.
 \end{theorem}
 \begin{proof}
 	Let $x \in A$. In the inner approximation $\APFun{id}[\fprate'][\tprate']$, element $x$ tests positive with probability $\tprate'$ and negative with probability $\fnrate' = 1 - \tprate'$.
@@ -235,7 +237,7 @@ When these sets model \emph{random approximate sets}, then their compositions mo
 $\SetUnion[\ASet{A}[\fprate_1][\tprate_1]][\ASet{B}[\fprate_2][\tprate_2]]$
 models a higher-order random approximate set which does not obey the second-order model; rather, it partitions the negative set such that each partition may have a different false positive rate and similarly for the positive set.
 
-This contrasts with $\AT{\left(\SetUnion[\Set{A}][\Set{B}]\right)}[\fprate][\tprate]$, in which the false positive rate for the negative elements are uniformly distributed and likewise for the positive elements.
+This contrasts with $\AT{\left(\SetUnion[\Set{A}][\Set{B}]\right)}[\fprate][\tprate]$, in which the false positive rate for the negative elements is uniformly distributed and likewise for the positive elements.
 We call these random approximate sets \emph{second-order} approximations.
 For completeness, the \emph{zeroth-order} are the objective sets, e.g., the zeroth-order approximation of $\SetUnion[\Set{A}][\Set{B}]$ is $\SetUnion[\Set{A}][\Set{B}]$.
 The complexity of the probabilistic model increases as the order increases.

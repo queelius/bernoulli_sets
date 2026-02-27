@@ -460,6 +460,14 @@ Three approaches handle this:
 (c) the cardinalities may be estimated from the approximate sets themselves, e.g., $|\tilde{A}_1 \cap \tilde{A}_2|$ is a biased estimator of $|A_1 \cap A_2|$ with computable bias from the error rates.
 \end{remark}
 
+\begin{remark}[Model order of composed sets]
+\label{rem:composed_order}
+The union and intersection formulas partition the relevant elements into regions with distinct per-element error probabilities.
+For instance, the union FNR assigns probability $\fnrate_1(1-\fprate_2)$ to elements in $A_1 \setminus A_2$ but $\fnrate_1 \fnrate_2$ to elements in $A_1 \cap A_2$.
+The result is therefore a higher-order Bernoulli set (\cref{def:model_order}) whose order equals the number of distinct partition blocks.
+The weighted-average rates in \cref{tab:set_ops} give the \emph{marginal} error rates over all positives (or negatives), collapsing the partition structure into a single summary statistic.
+\end{remark}
+
 \begin{figure}[ht]
 \centering
 \begin{tikzpicture}

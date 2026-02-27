@@ -44,11 +44,11 @@ There are two ways a binary prediction can be false.
 If we denote the set of false positives by $FP$, true positives by $TP$, false negatives by $FN$, and true negatives by $TN$, then the objective set $A = FN \cup TP$ and the approximate set $\hat{A} = TP \cup FP$.
 See \cref{fig:ex_approx_set} for an illustration.
 \begin{figure}[ht]
-	\caption{An approximate set $\hat{A}$ of an objective set $A$}
-	\label{fig:ex_approx_set}
 	\centering
 	\def\svgwidth{\columnwidth/4}
 	\input{img/aset_fp_fn.tex}
+	\caption{An approximate set $\hat{A}$ of an objective set $A$}
+	\label{fig:ex_approx_set}
 \end{figure}
 
 If we only have access to the approximation $\hat{A}$, we do not have the ability to partition the universe into the disjoint sets $FP$, $TP$, $FN$, and $TN$ as demonstrated in \cref{fig:ex_approx_set}.

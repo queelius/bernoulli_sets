@@ -118,8 +118,9 @@ small), then
 \end{equation}
 are needed to code the set, which is independent of $\p$, the false positive rate, and the false negative rate.
 
-The lower-bound on the \emph{expected} space complexity of a data structure that models the \emph{positive random approximate set} where the elements are over a \emph{countably infinite} universe is given by the following proposition.
-\begin{proposition}
+The lower-bound on the \emph{expected} space complexity of a data structure that models the \emph{positive random approximate set} where the elements are over a \emph{countably infinite} universe is a classical result due to Carter, Floyd, Gill, Markowsky, and Wegman~\cite{carterExact}.
+We restate it here in the notation of the present paper and include a proof for completeness.
+\begin{proposition}[{\cite{carterExact}}]
 \label{pst:approx_l_b}
 The \emph{information-theoretic lower-bound}\index{information-theoretic lower-bound} of a data structure that implements the countably infinite \emph{positive random approximate set} abstract data type has an \emph{expected} bit length given by
 \begin{equation}
@@ -128,16 +129,19 @@ The \emph{information-theoretic lower-bound}\index{information-theoretic lower-b
 where $\fprate > 0$ is the false positive rate\index{false positive rate}.
 \end{proposition}
 \begin{proof}
+It suffices to prove the bound for deterministic encodings; the extension to randomized data structures follows from Yao's minimax principle.
+
 Consider a finite subset of the universe with $n$ elements, from which an
 objective set $S$ of size $\p$ is drawn.
-A representation using $B$ bits can take at most $2^B$ distinct states.
+A deterministic encoding using $B$ bits maps each input set $S$ to a state
+$r = f(S)$ from at most $2^B$ distinct states.
 Each state $r$ determines a \emph{positive response set}
 $Q(r) = \{x : \text{query}(x,r) = 1\}$.
 Since the data structure has no false negatives ($\tprate = 1$), we have
-$S \subseteq Q(r)$ for the state $r$ encoding $S$.
-Among the $n - \p$ negatives, each belongs to $Q(r)$ independently with
-probability at most $\fprate$, so
-$\Expect{|Q(r)|} \leq \p + \fprate(n - \p)$.
+$S \subseteq Q(r)$ for the state $r = f(S)$ encoding $S$.
+The false positive rate constraint requires that at most an $\fprate$-fraction of the $n - \p$ negatives belong to $Q(f(S))$ for every input set $S$, so
+$|Q(f(S))| \leq \p + \fprate(n - \p)$ for all $S$.
+In particular, $|Q(r)| \leq \p + \fprate(n - \p)$ for every state $r$ in the image of $f$.
 
 By the pigeonhole principle, some state $r^*$ must encode at least
 $\binom{n}{\p} / 2^B$ distinct input sets.
