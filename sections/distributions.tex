@@ -8,7 +8,7 @@ However, some \emph{error measures} span multiple subsets, such as positives and
 Any such error measure may be modeled as a \emph{Bernoulli mixture}.
 
 We are typically interested in the error rates of \emph{special} subsets.
-For example, if we have a universal set $\Set{X}$ and with probability $P(x)$ an element $x \in \Set{X}$ is tested for membership in a collection of sets over $\Set{X}$, then to reduce the expected error rate on membership tests elements with higher probability of begin tested should be assigned smaller error rates.
+For example, if we have a universal set $\Set{X}$ and with probability $P(x)$ an element $x \in \Set{X}$ is tested for membership in a collection of sets over $\Set{X}$, then to reduce the expected error rate on membership tests elements with higher probability of being tested should be assigned smaller error rates.
 
 
 The second-order random approximate sets are \emph{parameterized} by the \emph{expected} rates of two types of error, false negative and false positive rates.
@@ -129,7 +129,7 @@ The false negative rate realizes an uncertain value as given by
 with a support $\SetBuilder{j / p}{j = 0,\ldots,p}$, an expectation 
 $\fnrate$, and a variance $\fnrate(1-\fnrate) / p$.
 \end{theorem}
-The proof follows the same logic as the proof for \cref{thm:fpr}.
+The proof follows the same logic as the proof for \cref{thm:fpr}, with $\FN_p \sim \bindist(p, \fnrate)$ in place of $\FP_n \sim \bindist(n, \fprate)$.
 
 In \cref{sec:set_theory}, we consider set-theoretic operations like 
 \emph{complements}. The \emph{complement} operator applied to an approximate 
@@ -140,8 +140,7 @@ countably infinite positives.
 An approximate set of a set with countably infinite positives has a false 
 negative rate that is \emph{certain} to obtain $\fnrate$.
 \end{corollary}
-The proof follows the same logic as the proof for \cref{cor:fpr_as_vareps}, 
-except we replace \emph{negatives} with \emph{positives}.
+The proof follows the same logic as the proof for \cref{cor:fpr_as_vareps}, replacing negatives with positives and $\fprate$ with $\fnrate$.
 
 The number of true positives is given by the following corollary.
 \begin{corollary}
@@ -155,7 +154,7 @@ with a distribution given by
 By definition, the \emph{true positive rate} is given by $\TPR_p = 1 - 
 \beta_p$.
 \end{corollary}
-The proof follows the same logic as the proof for \cref{thm:fpr}.
+The proof follows the same logic as the proof for \cref{thm:fpr}, with $\TP_p = p - \FN_p$ and $\tprate = 1 - \fnrate$.
 
 Many other properties of random approximate sets follow from these distributions.
 For instance, the distribution of $\Card{\tilde{A}^\fprate_\tprate}$ given $p$ positives is
@@ -197,11 +196,11 @@ The limiting distributions for the false positive and true positive rates are gi
     \end{equation}
     where $\RV{X_1},\ldots,\RV{X_n}$ are $n$ independent Bernoulli trials each with a mean $\fprate$ and a variance $\fprate(1-\fprate)$.
     Therefore, by the central limit theorem~\cite{feller2}, $\alpha_n$ converges in distribution to a normal distribution with a mean $\fprate$  and a variance $\fprate(1-\fprate)/n$.
-    The proof for the true positive rate follows the same logic.
+    The proof for the true positive rate follows the same logic, replacing $\fprate$ with $\tprate$, $n$ with $p$, and negatives with positives.
 \end{proof}
 By \cref{eq:approxfpr,eq:approxtpr},
 \begin{equation}
-	\mathrm{TNR}_n \xrightarrow{d} \normdist\!\left(1-\fprate, \fprate(1-\fprate) / n\right) \text{ and } \beta_n \xrightarrow{d} \normdist\!\left(1-\tprate, \tprate(1-\tprate) / p\right).	
+	\mathrm{TNR}_n \xrightarrow{d} \normdist\!\left(1-\fprate, \fprate(1-\fprate) / n\right) \text{ and } \beta_p \xrightarrow{d} \normdist\!\left(1-\tprate, \tprate(1-\tprate) / p\right).	
 \end{equation}
 
 The Bernoulli set model is the \emph{maximum entropy} distribution over $\{0,1\}^u$ subject to the constraint that each element has a fixed marginal error probability: the binomial distribution maximizes entropy over $\{0,\ldots,n\}$ for a given mean~\cite{coverThomas}.
@@ -225,18 +224,28 @@ If these outcomes cannot be observed, e.g., it is too costly to compute or the i
     \label{eq:conf_tpr}
     \tprate \pm \sqrt{\frac{\tprate(1-\tprate)}{p}} \Phi^{-1}\!\left(\frac{1+\gamma}{2}\right),
     \end{equation}
-    where $\Phi^{-1} : [0,1] \mapsto \RealSet$ is the inverse cumulative distribution function of the standard normal.
+    where $\Phi^{-1} : [0,1] \to \RealSet$ is the inverse cumulative distribution function of the standard normal.
 \end{theorem}
+\begin{proof}
+By \cref{thm:approxfpr}, $\alpha_n$ is asymptotically normal with mean $\fprate$ and variance $\sigma^2 = \fprate(1-\fprate)/n$.
+Standardizing, $Z = (\alpha_n - \fprate)/\sigma \xrightarrow{d} \normdist(0,1)$.
+A $\gamma$-level confidence interval requires
+$\Prob{-z_\gamma \leq Z \leq z_\gamma} = \gamma$,
+where $z_\gamma = \Phi^{-1}\!\left(\frac{1+\gamma}{2}\right)$.
+Substituting and solving for $\alpha_n$ yields
+$\fprate \pm \sigma \, z_\gamma = \fprate \pm \sqrt{\fprate(1-\fprate)/n}\;\Phi^{-1}\!\left(\frac{1+\gamma}{2}\right)$.
+The argument for the true positive rate is identical with $\tprate$ and $p$ replacing $\fprate$ and $n$.
+\end{proof}
 As a worst-case (maximum uncertainty), we may let $n = p = 1$ in \cref{eq:conf_fpr,eq:conf_tpr}.
 %However, if the universe is large and the objective sets are relatively small, a slightly optimistic confidence interval for $\fprate$ is provided by letting $n = \Card{\Set{U}}$.
 
 \subsection{Other binary performance measures}
 \label{sec:perf}
 %\label{sec:func_rand_asets}
-Suppose we have some other function $g : \PS{\Set{X}} \mapsto \Set{Y}$ that is not a \emph{constant}, then the composition $\Fun{g} \circ \APFun{id}^\fprate_\tprate$ is some probability distribution over the codomain $\Set{Y}$.
+Suppose we have some other function $g : \PS{\Set{X}} \to \Set{Y}$ that is not a \emph{constant}, then the composition $\Fun{g} \circ \APFun{id}^\fprate_\tprate$ is some probability distribution over the codomain $\Set{Y}$.
 That is, $\left(g \circ \APFun{id}^\fprate_\tprate\right)(\Set{A})$ is a \emph{random variable}.
 \begin{example}
-	Let $f : \PS{\{0,1\}} \mapsto \{0,1\}$ be defined as
+	Let $f : \PS{\{0,1\}} \to \{0,1\}$ be defined as
 	\begin{equation}
 	f(\Set{A}) =
 	\begin{cases}
@@ -248,6 +257,7 @@ That is, $\left(g \circ \APFun{id}^\fprate_\tprate\right)(\Set{A})$ is a \emph{r
 \end{example}
 
 We consider several classes of functions and the distributions induced by replacing the inputs with random approximate sets, e.g., binary performance measures like positive predictive value.
+These measures are standard in binary classification and information retrieval; see Fawcett~\cite{fawcettROC} for an introduction to ROC analysis and Powers~\cite{powersEval} for a systematic comparison of evaluation measures.
 
 % functions like subset or power set may be defined with respect to the member-of relation thus, the approximate member-of relation induces other kinds of approximate relations.
 
@@ -277,7 +287,7 @@ The positive predictive value of random approximate sets is a random variable gi
 	\begin{equation}
 	\PPV = \frac{\TP_{\p}}{\TP_{\p} + \FP_{\n}}
 	\end{equation}
-	with an \emph{expectation} given \emph{approximately} by
+	with an \emph{expectation} given \emph{approximately} by (a second-order Taylor expansion of $\Expect{\TP_\p / (\TP_\p + \FP_\n)}$ about the means, valid when $\p\tprate$ and $\n\fprate$ are both large; the error is $\mathcal{O}(1/\min(\p,\n)^2)$)
 	\begin{equation}
 	\label{eq:approx_expected_precision}
 	\ppv(\tprate, \fprate, \p, \n) \approx 
@@ -295,12 +305,80 @@ See \cref{sec:proof_approx_expected_precision} for a proof of
 	%\def\svgscale{0.75}
 	\centering
 	\captionsetup{justification=centering}
+	\input{img/out.pdf_tex}
 	\caption
 	{
-		Relative frequency of positive predicitive values for several different parameterizations of the false positive and true positive rates given $\n = 900$ negatives and $\p=100$ positives.
-	}    
-	\input{img/out.pdf_tex}
+		Relative frequency of positive predictive values for several different parameterizations of the false positive and true positive rates given $\n = 900$ negatives and $\p=100$ positives.
+	}
 	\label{fig:prec_vs_fprate_and_fnrate}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+		width=0.7\textwidth,
+		height=0.45\textwidth,
+		xlabel={False positive rate $\fprate$},
+		ylabel={Expected precision (PPV)},
+		xmin=0, xmax=0.05,
+		ymin=0, ymax=1,
+		legend pos=north east,
+		ymajorgrids, xmajorgrids,
+		major grid style={gray!30},
+		thick,
+	]
+	\addplot[blue, solid] table[col sep=comma, x index=0, y index=1]
+		{data/prec_vs_fprate3.csv};
+	\addlegendentry{$\lambda = 10\%$}
+	\addplot[red, dashed] table[col sep=comma, x index=0, y index=1]
+		{data/prec_vs_fprate2.csv};
+	\addlegendentry{$\lambda = 1\%$}
+	\addplot[black!60!green, dashdotted] table[col sep=comma, x index=0, y index=1]
+		{data/prec_vs_fprate1.csv};
+	\addlegendentry{$\lambda = 0.1\%$}
+	\end{axis}
+	\end{tikzpicture}
+	\caption{Expected precision (positive predictive value) as a function
+	of the false positive rate $\fprate$ for a positive Bernoulli set
+	($\fnrate = 0$) at three prevalences
+	$\lambda = \p/(\p+\n)$.
+	Even a small false positive rate dramatically reduces precision
+	when the base rate is low.}
+	\label{fig:ppv_vs_fprate}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+		width=0.7\textwidth,
+		height=0.45\textwidth,
+		xlabel={False positive rate $\fprate$},
+		ylabel={Expected precision (PPV)},
+		xmin=0, xmax=0.05,
+		ymin=0, ymax=1,
+		legend pos=north east,
+		ymajorgrids, xmajorgrids,
+		major grid style={gray!30},
+		thick,
+	]
+	\addplot[red, dashed] table[col sep=comma, x index=0, y index=1]
+		{data/prec_vs_fprate2.csv};
+	\addlegendentry{Theory ($\lambda = 1\%$)}
+	\addplot[only marks, mark=o, mark size=1.2pt, blue]
+		table[col sep=comma, x index=0, y index=1]
+		{data/ppv_sim_vs_theory.csv};
+	\addlegendentry{Monte Carlo ($N = 50\,000$)}
+	\end{axis}
+	\end{tikzpicture}
+	\caption{Comparison of theoretical expected PPV
+	(\cref{eq:approx_expected_precision}, dashed) with Monte Carlo simulation
+	(circles, $N = 50\,000$ trials per point) for a positive Bernoulli set
+	($\fnrate = 0$) with prevalence $\lambda = 1\%$ ($\p = 100$, $\n = 9900$).
+	The theoretical curve and simulation points are indistinguishable,
+	validating the second-order Taylor approximation.}
+	\label{fig:ppv_theory_vs_sim}
 \end{figure}
 
 We make the following observations about \cref{eq:approx_expected_precision}:

@@ -15,24 +15,25 @@ Without such a framework, each new combination of approximate sets requires a be
 
 \paragraph{Contribution.}
 We introduce the \emph{Bernoulli set model}, a probabilistic framework for \emph{random approximate sets} built on two axioms: element-wise independence of errors and conditional independence of block error rates.
-The central result is \emph{compositional closure}: every set-theoretic operation on Bernoulli sets produces a Bernoulli set whose error rates are closed-form functions of the input rates and set cardinalities.
-This closure extends to higher-order compositions via a recursive application of the composition theorem.
+The central result is \emph{compositional rate computability}: every set-theoretic operation on Bernoulli sets produces a (possibly higher-order) Bernoulli set whose error rates are closed-form functions of the input rates and set cardinalities.
+This computability extends to higher-order compositions via a recursive application of the composition theorem; in particular, a second-order operation on second-order inputs yields a higher-order model whose rates are nonetheless computable.
 From these axioms we derive:
 \begin{enumerate}[nosep]
     \item the probability distributions of all standard binary classification measures (precision, recall, accuracy, etc.),
-    \item closed-form error rates for complement, union, intersection, and set difference,
-    \item the joint entropy of error counts,
-    \item conditions under which approximate sets form commutative monoids, and
+    \item closed-form error rates for complement, union, intersection, and set difference, together with the monoidal structure they induce,
+    \item the joint entropy of error counts, and
     \item an application to encrypted Boolean search in which compositionality yields all performance guarantees.
 \end{enumerate}
 The framework is formulated as an abstract data type: any implementation whose membership queries satisfy the Bernoulli axioms---including Bloom filters, perfect hash filters, and their compositions---inherits the full theory automatically.
 
 \paragraph{Related work.}
 The original Bloom filter~\cite{bf} introduced approximate set membership with one-sided error.
-Subsequent work has produced a rich family of probabilistic data structures---including cuckoo filters~\cite{cuckooFilter} and many variants surveyed by Broder and Mitzenmacher~\cite{broderMitzenmacher}---with improved space efficiency or additional functionality.
+Subsequent work has produced a rich family of probabilistic data structures---including cuckoo filters~\cite{cuckooFilter}, quotient filters~\cite{quotientFilter}, xor filters~\cite{xorFilter}, and ribbon filters~\cite{ribbonFilter}---surveyed by Broder and Mitzenmacher~\cite{broderMitzenmacher}, with improved space efficiency or additional functionality.
+Bose et al.~\cite{boseBloom} give tight bounds on the Bloom filter false positive rate, Kirsch and Mitzenmacher~\cite{kirschMitzenmacher} show that two hash functions suffice, and Carter and Wegman~\cite{carterWegman} provide the universal hash families underlying many implementations.
+Related probabilistic summaries such as the count-min sketch~\cite{countMinSketch} trade exact answers for space efficiency in the streaming setting.
 However, analyses typically treat each structure in isolation, deriving error rates for a single filter rather than for compositions of filters.
 General probabilistic methods for randomized algorithms~\cite{mitzenmacherUpfal} provide the analytical toolkit (concentration inequalities, entropy bounds) but do not address the compositional structure of approximate sets.
-The interval arithmetic approach to uncertain parameters~\cite{basicinterval} addresses a related but distinct problem: propagating uncertainty through arithmetic expressions rather than set-theoretic ones.
+The interval arithmetic approach to uncertain parameters~\cite{basicinterval,mooreInterval} addresses a related but distinct problem: propagating uncertainty through arithmetic expressions rather than set-theoretic ones.
 Our framework complements these lines of work by providing an algebraic layer that sits above any particular implementation.
 
 \paragraph{Organization.}
@@ -41,7 +42,6 @@ Our framework complements these lines of work by providing an algebraic layer th
 \Cref{sec:characteristics} derives the probability distributions of fundamental binary classification measures.
 \Cref{sec:set_theory} derives error rates for all four set-theoretic operations and establishes closure properties.
 \Cref{sec:relational} treats relational predicates (subset, equality) on Bernoulli sets.
-\Cref{sec:intervals} addresses uncertain rate parameters via interval arithmetic.
+\Cref{sec:intervals} develops interval arithmetic for uncertain rate parameters.
 \Cref{sec:entropy} derives the joint entropy of error counts and establishes space complexity bounds.
-\Cref{sec:algebraic_structure} examines the algebraic structure (commutative monoids) of approximate sets.
 \Cref{sec:bool_search} demonstrates the framework through an application to encrypted Boolean search.

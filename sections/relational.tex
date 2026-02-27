@@ -7,8 +7,8 @@ The relational \emph{member-of} predicate $\in : U \times 2^U$ is the set-indica
 By \cref{prop:element_rates}, given $x \in A$, $x \in \tilde{A}^\fprate_\tprate$ with probability $\tprate$ and given $x \notin A$, $x \in \tilde{A}^\fprate_\tprate$ with probability $\fprate$.
 These probabilities are axiomatic in the second-order random approximate set model.
 
-Other kinds of relational predicates are functions of the \emph{member-of} predicate, in particular the subset $\subseteq : 2^U \times 2^U \mapsto \{0,1\}$, equality $= : 2^U \times 2^U \mapsto \{0,1\}$, and
-proper subset $\subset : 2^U \times 2^U \mapsto \{0,1\}$ predicates respectively defined as (where $[\phi]$ denotes the Iverson bracket: $1$ if $\phi$ is true, $0$ otherwise)
+Other kinds of relational predicates are functions of the \emph{member-of} predicate, in particular the subset $\subseteq : 2^U \times 2^U \to \{0,1\}$, equality $= : 2^U \times 2^U \to \{0,1\}$, and
+proper subset $\subset : 2^U \times 2^U \to \{0,1\}$ predicates respectively defined as (where $[\phi]$ denotes the Iverson bracket: $1$ if $\phi$ is true, $0$ otherwise)
 \begin{align}
 \label{def:subset_pred}
 A \subseteq B	&= \prod_{x \in A} [x \in B],\\

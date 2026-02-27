@@ -21,7 +21,7 @@ We consider queries over the Boolean algebra $Q = (\PS{\Set{K}}, \land, \lor, \n
 
 We denote the set of documents by $\Set{D}$.
 \emph{Search indexes} may be used to determine which subset of $\Set{D}$ is relevant to a given query.
-We define the function $\MakeIndex \colon \Set{D} \mapsto \PS{\Set{K}}$ that maps documents to search indexes by
+We define the function $\MakeIndex \colon \Set{D} \to \PS{\Set{K}}$ that maps documents to search indexes by
 \begin{equation}
 \MakeIndex(d) \coloneqq
 \SetBuilder
@@ -36,7 +36,7 @@ We assume a one-to-one correspondence between $\Set{D}$ and the set of search in
 
 \begin{definition}
 \label{def:find}
-Let $\Find \colon Q \mapsto \PS{\Set{D}}$ be the unique Boolean algebra homomorphism determined by the following clauses:
+Let $\Find \colon Q \to \PS{\Set{D}}$ be the unique Boolean algebra homomorphism determined by the following clauses:
 \begin{enumerate}
 	\item For an atomic key $x \in \Set{K}$,
 	\begin{equation}
@@ -114,7 +114,7 @@ An implementation of $\Find$ is given by \cref{alg:bool_search}.
 \label{sec:secure_indexes}
 We consider an \emph{approximation} of the Boolean search model in which the search indexes are replaced by \emph{random approximate sets}.
 In particular, each search index $\MakeIndex(d)$ is replaced by an approximate set $\widetilde{\MakeIndex}(d)$ with false positive rate $\fprate$ and false negative rate $\fnrate$.
-This is an appropriate abstract data type for settings such as \emph{Encrypted Search}, where conventional search indexes reveal too much information to untrusted third parties.
+This is an appropriate abstract data type for settings such as \emph{Encrypted Search}~\cite{songWagnerPerrig,curtmola,cashDynamic}, where conventional search indexes reveal too much information to untrusted third parties.
 
 We denote the resulting find function that searches over approximate set indexes by $\Find^\sigma$ as opposed to the objective function $\Find$.
 This replacement \emph{induces} approximate result sets, i.e., $\Find^\sigma(q)$ maps to an approximate set of $\Find(q)$.
@@ -122,12 +122,12 @@ Note that $\Find^\sigma$ is a deterministic algorithm that always generates the 
 
 \subsection{Encrypted search composition}
 \label{sec:encrypted_search}
-A simple implementation of encrypted search may be based on a substitution cipher from keys to \emph{trapdoors} using a one-way cryptographic hash function $\operatorname{h} \colon \BitSet^* \mapsto \BitSet^k$.
-Suppose we have a function $\operatorname{H} \colon [q] \mapsto [q']$ that maps Boolean queries on keys to equivalent Boolean queries on trapdoors using $\operatorname{h}$.
+A simple implementation of encrypted search may be based on a substitution cipher from keys to \emph{trapdoors} using a one-way cryptographic hash function $\operatorname{h} \colon \BitSet^* \to \BitSet^k$.
+Suppose we have a function $\operatorname{H} \colon [q] \to [q']$ that maps Boolean queries on keys to equivalent Boolean queries on trapdoors using $\operatorname{h}$.
 Then the encrypted find function is given by the composition
 \begin{equation}
 \label{eq:encrypted_find}
-\EncryptedFind = \Find^\sigma \circ \operatorname{H} \colon [q] \mapsto \PS{\Set{D}}\,.
+\EncryptedFind = \Find^\sigma \circ \operatorname{H} \colon [q] \to \PS{\Set{D}}\,.
 \end{equation}
 In practice, $\operatorname{H}$ is computed on a \emph{trusted machine} and the resulting query on trapdoors is sent to an untrusted machine that executes $\Find^\sigma$.
 

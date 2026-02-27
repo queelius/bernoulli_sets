@@ -19,7 +19,7 @@ Any data type needs one or more \emph{value constructors}, functions that map to
 %The abstract data type of the \emph{random approximate set} has an axiomatic specification.
 
 The random approximate set is an abstract data type that models a \emph{set} with an additional set of \emph{probabilistic} axioms described in \cref{sec:bernoulli_model}.
-Suppose $T$ is a data type that overloads the \emph{member-of} predicate $\SetContains : U \times T \mapsto \{0,1\}$ and has a \emph{value constructor} $\ctor{\fprate}{\tprate}$ that is a \emph{conditional probability distribution} over values of $T$ given elements of type $2^U$.
+Suppose $T$ is a data type that overloads the \emph{member-of} predicate $\SetContains : U \times T \to \{0,1\}$ and has a \emph{value constructor} $\ctor{\fprate}{\tprate}$ that is a \emph{conditional probability distribution} over values of $T$ given elements of type $2^U$.
 Data type $T$ \emph{models} the abstract data type of the random approximate set over elements in $U$ with a false positive rate $\fprate$ and true positive rate $\tprate$ if \cref{def:sample_fprate,def:sample_tprate} are satisfied, i.e.,
 \begin{equation}
 	\Prob{\SetContains[x][\ctor{\fprate}{\tprate}(A)] | \SetNotContains[x][A]} = \fprate
@@ -42,12 +42,12 @@ However, we also wish to allow for \emph{deterministic} value constructors.\foot
 \subsection{Deterministic value constructors}
 Value constructors compatible with the random approximate set model may come in many forms.
 
-%Suppose we have a value constructor $\ctor : \PS{\Set{U}} \mapsto T$ where $T$ models random approximate sets over $\PS{\Set{U}}$ with true and false positive rates $\tprate$ and $\fprate$ respectively.
+%Suppose we have a value constructor $\ctor : \PS{\Set{U}} \to T$ where $T$ models random approximate sets over $\PS{\Set{U}}$ with true and false positive rates $\tprate$ and $\fprate$ respectively.
 %For instance, in \cref{sec:bool_search}, even if the Boolean search indexes are based on \emph{non-deterministic} value %constructors, the resulting \emph{approximate result sets} that queries map to are \emph{deterministic} given these search %indexes.
 
-Suppose $\ctor{\fprate}{\fprate} : 2^U \mapsto T$ (i.e., a deterministic total function) maps sets in $2^U$ to objects of type $T$ that model random approximate sets over the input.
+Suppose $\ctor{\fprate}{\fprate} : 2^U \to T$ (i.e., a deterministic total function) maps sets in $2^U$ to objects of type $T$ that model random approximate sets over the input.
 Since $T$ models the abstract data type of the set, there is a unique bijection between $T$ and $2^U$, i.e., every value in $T$ models a specific subset of $U$.
-Thus, we may view $\ctor{\fprate}{\tprate}$ as a function $\ctor{\fprate}{\tprate} : 2^U \mapsto 2^U$ with an \emph{image}
+Thus, we may view $\ctor{\fprate}{\tprate}$ as a function $\ctor{\fprate}{\tprate} : 2^U \to 2^U$ with an \emph{image}
 \begin{equation}
 \Image(\ctor{\fprate}{\tprate}) = \SetBuilder{\ctor{\fprate}{\tprate}(A)}{A \in 2^U} \subseteq 2^U.
 \end{equation}
@@ -57,11 +57,11 @@ Since the value constructor $\ctor{\fprate}{\tprate}$ may map multiple input set
 %The only thing we can say with certainty \emph{a priori}\footnote{A priori knowledge is independent of experience.} about the image of $\ctor{\fprate}{\tprate}$ is that its members are subsets of $\Set{U}$ and it contains the empty set $\EmptySet$ and universal set $\Set{U}$.
 
 \begin{remark}
-It is often trivial to implement a family of deterministic value constructors $2^U \mapsto T = \{\operatorname{f_1},\ldots,\operatorname{f_n}\}$ with distinct $\sigma$-algebras where $T$ models random approximate sets over $2^U$.
-Additionally, assuming each time an approximate set is constructed, a ``random'' value constructor from $2^U \mapsto T$ is invoked, then repeated invocations on some set $A \in 2^U$ generates a frequency distribution of sets that converges to $\tilde{A}$ as $n \to \infty$, e.g., ``randomly'' seeding a Bloom filter's hash function.
+It is often trivial to implement a family of deterministic value constructors $2^U \to T = \{\operatorname{f_1},\ldots,\operatorname{f_n}\}$ with distinct $\sigma$-algebras where $T$ models random approximate sets over $2^U$.
+Additionally, assuming each time an approximate set is constructed, a ``random'' value constructor from $2^U \to T$ is invoked, then repeated invocations on some set $A \in 2^U$ generates a frequency distribution of sets that converges to $\tilde{A}$ as $n \to \infty$, e.g., ``randomly'' seeding a Bloom filter's hash function.
 \end{remark}
 
-How do we reconcile a deterministic value constructor $\ctor{\fprate}{\tprate} : 2^U \mapsto T$ with the \emph{probabilistic model}?
+How do we reconcile a deterministic value constructor $\ctor{\fprate}{\tprate} : 2^U \to T$ with the \emph{probabilistic model}?
 In this context, the notion of \emph{probability} quantifies our \emph{ignorance}:
 \begin{enumerate}
 \item Given a set $S$, we do not have complete \emph{a priori} knowledge about the set the value constructor maps to.
@@ -77,7 +77,7 @@ Additionally, the domain $2^U$ has a cardinality $2^{|U|}$ and thus exhaustive s
 %However, we may still reduce our uncertainty by mapping some subset of interest.
 \end{enumerate}
 
-Suppose $U$ is finite. The set of deterministic value constructors $2^U \mapsto 2^U$ has a cardinality $(2^u)^(2^u)$, and in a sense they are all compatible with the random approximate set model.
+Suppose $U$ is finite. The set of deterministic value constructors $2^U \to 2^U$ has a cardinality $(2^u)^(2^u)$, and in a sense they are all compatible with the random approximate set model.
 
 For instance, a Bloom filter (positive approximate set) may have a family of hash function that, for a particular binary coding of the elements of a given universal set, maps \emph{every} element in the universal set to the same hash.
 Thus, for instance, no matter the objective set $X \subseteq U$, it will map to $U$.

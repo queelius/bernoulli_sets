@@ -7,11 +7,29 @@
 
 We have developed the Bernoulli set model, a compositionally closed probabilistic framework for random approximate sets parameterized by false positive and false negative rates.
 The central contribution is \emph{closure}: the error rates of any set-theoretic expression---complement, union, intersection, difference---are closed-form functions of the operand rates and set cardinalities, and this closure extends to higher-order compositions via the recursive $k$-fold composition theorem.
-From two axioms (element-wise independence and conditional independence of block error rates), we derived the probability distributions of all standard binary classification measures, the joint entropy of error counts, and conditions under which approximate sets form commutative monoids.
+From two axioms (element-wise independence and conditional independence of block error rates), we derived the probability distributions of all standard binary classification measures, the joint entropy of error counts, and the monoidal structure of approximate sets under union and intersection.
 The framework is formulated as an abstract data type, so any implementation satisfying the Bernoulli axioms---Bloom filters, perfect hash filters, or their compositions---inherits the full theory.
 We demonstrated this compositionality through an application to encrypted Boolean search.
 
-The model rests on two structural assumptions: element-wise independence of errors and a finite universal set.
-These are satisfied by most practical probabilistic data structures but exclude settings with correlated errors (e.g., locality-sensitive hashing) or continuous sample spaces.
-Extending the framework to dependent error models, continuous universes, and richer partition structures (beyond the second-order positive/negative split) are natural directions for future work.
-A type-theoretic generalization---treating approximate Booleans, maps, and relations as instances of a single algebraic framework---is developed in companion work on approximate algebraic data types.
+\paragraph{Practical implications.}
+The abstract data type formulation means that the results of this paper apply automatically to any implementation whose membership queries satisfy element-wise independence.
+A practitioner building a system on Bloom filters, for instance, need not re-derive the error analysis for each new combination of filters: the composition theorems of \cref{sec:set_theory} and the distribution results of \cref{sec:characteristics} apply immediately, yielding closed-form confidence intervals, expected precision, and entropy bounds.
+This separation of the probabilistic guarantee from the implementation details is the key advantage of the axiomatic approach.
+
+\paragraph{Open problems.}
+Several directions remain for future work.
+First, the information-theoretic space bound of \cref{pst:approx_l_b} assumes a positive approximate set ($\tprate = 1$); the general case $0 < \tprate < 1$ remains open, as noted in \cref{rem:general_lower_bound}.
+Second, the model assumes element-wise independence of errors.
+Extending the framework to \emph{correlated} error models---such as those arising in locality-sensitive hashing or cache-line-aligned filters---would broaden applicability, though the clean binomial structure would likely give way to more complex combinatorics.
+Third, the partition weights $w_1, w_2, w_3$ in the set-operation formulas require knowledge of the objective set cardinalities, which are typically unknown (\cref{rem:unknown_partitions}).
+Developing principled estimators for these cardinalities from the approximate sets themselves, with quantified bias and variance, is a natural next step.
+
+\paragraph{Historical context.}
+At the per-element level, the Bernoulli set model reduces to a collection of independent binary symmetric channels~\cite{shannonBSC}, and the randomized-response mechanism of Warner~\cite{warner1965} provides a social-science interpretation.
+The contribution of the present work is the \emph{set-level} compositional algebra that sits above these per-element models.
+
+\paragraph{Companion work.}
+The algebraic structure developed here extends to richer mathematical objects.
+The algebra of approximate maps---functions $X \to Y$ with Bernoulli errors---is treated in a companion paper on approximate maps, which derives composition rules for approximate Boolean functions and function spaces.
+Approximate relations, including the relational algebra operators (join, project, select), are developed in a companion paper on approximate relations.
+A type-theoretic generalization---treating approximate Booleans, maps, and relations as instances of a single algebraic framework over sum, product, and function types---is developed in companion work on approximate algebraic data types.

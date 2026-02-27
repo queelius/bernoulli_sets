@@ -2,7 +2,7 @@
 % Interval -- uncertainty
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Uncertain rates}
+\section{Interval arithmetic for uncertain rates}
 \label{sec:intervals}
 In practice, the expected false positive and true positive rates may not be known exactly.
 This section develops an \emph{interval arithmetic} approach: each uncertain rate is represented by an interval guaranteed to contain the true value, and the error-rate formulas of \cref{sec:set_theory} are evaluated over these intervals to produce guaranteed bounds on the output rates.
@@ -45,7 +45,7 @@ realizes some value in the set, which is typically an \emph{interval}, i.e., a c
 Intervals represent an uncertainty and they manifest themselves in two independent ways.
 The common notion of the \emph{confidence interval} is a product of the probabilistic model, i.e., the realized true positive rate $\tprateob$, which is normally centered around the expected true positive rate $\tprate$ as discussed in \cref{sec:asymtotic}.
 We may use \emph{interval arithmetic} and replace point values with interval values, point values being a degenerate case.
-Basic interval arithmetic is presented in \cite{basicinterval}.
+Basic interval arithmetic is presented in~\cite{basicinterval}; the foundational treatment is due to Moore~\cite{mooreInterval}.
 
 A set sampled from $\tilde{A}[\fprate][\tprate]$ is an approximate set such that the $(1-\gamma)\cdot 100\%$ asymptotic confidence intervals for the realized false negative and false positive rates are respectively given by
 \begin{equation}

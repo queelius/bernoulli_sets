@@ -17,6 +17,7 @@ P(\mathbf{1}_{\tilde{A}}(x) \neq \mathbf{1}_{A}(x) \mid \mathbf{1}_{\tilde{A}}(y
 	P(\mathbf{1}_{\tilde{A}}(x) \neq \mathbf{1}_{A}(x)).
 \end{equation}
 More generally, the family $\{\mathbf{1}_{\tilde{A}}(x) : x \in U\}$ is mutually independent given the objective set $A$ and the error rates.
+Furthermore, within each partition block $B_i$ (\cref{def:model_order}), the error indicators $\{\mathbf{1}_{\tilde{A}}(x) : x \in B_i\}$ are identically distributed.
 \end{axiom}
 
 The complexity in the Bernoulli set model stems from the fact that different subsets of the universal set may exhibit different error rates.
@@ -24,7 +25,7 @@ Suppose the objective set $R \in 2^U$ induces a partition $\{B_1, \ldots, B_n\}$
 \begin{definition}[Model order]
 \label{def:model_order}
 The \emph{order} of a Bernoulli set model is the number of partition blocks $n$.
-A zeroth-order model ($n = 0$) is the exact set.
+A zeroth-order model ($n = 0$) is the degenerate case: no partition blocks and no errors (the exact set).
 A first-order model ($n = 1$) assigns a single error rate to all elements (symmetric channel).
 A second-order model ($n = 2$) distinguishes positives from negatives with rates $\tprate$ and $\fprate$ respectively.
 In general, an $n$-th order model partitions $U$ into $n$ blocks, each with its own error rate; the maximum order is $|U|$.
@@ -35,6 +36,18 @@ In the second-order (positive-negative) model, $n = 2$: the partition is $\{R, R
 Given the objective set $R$, the random error rates $\alpha_1, \ldots, \alpha_n$ for the respective partition blocks $B_1, \ldots, B_n$ are mutually independent.
 \end{axiom}
 For instance, in the second-order model, the random false positive rate $\alpha$ and the random true positive rate $\beta$ are conditionally independent given $R$.
+
+\begin{remark}[Relation to the binary symmetric channel]
+\label{rem:bsc}
+At the per-element level, the Bernoulli set model is a collection of independent binary symmetric channels~\cite{shannonBSC}; equivalently, each element undergoes Warner's randomized response~\cite{warner1965}. For each $x \in U$, the indicator $\mathbf{1}_{\tilde{A}}(x)$ is the output of a BSC with crossover probability $\fprate$ (if $x \notin A$) or $\fnrate$ (if $x \in A$).
+The novelty of the present framework is not the per-element channel model, which is classical, but the \emph{set-level} compositional algebra: the derivation of error rates for union, intersection, complement, and their higher-order compositions over collections of such channels.
+\end{remark}
+
+\begin{remark}[Axiom economy]
+\label{rem:axiom_economy}
+Most results in this paper---the distributions of all binary classification measures (\cref{sec:characteristics}), the set-operation error rates and monoidal structure (\cref{sec:set_theory}), and the relational probabilities (\cref{sec:relational})---follow from \cref{asm:element_indep} alone.
+\Cref{asm:fpr_fnr_r_indep} is needed only when the objective set $R$ is itself uncertain, in which case it permits the factorization of the joint distribution of $\tilde{R}$ and $R$ (\cref{sec:prob_model}) and the entropy decomposition (\cref{sec:entropy}).
+\end{remark}
 
 There are two natural \emph{statistics} of the Bernoulli set model, the random false positive and true positive rates conditioned on $R = A$.
 They are respectively defined by
@@ -88,11 +101,11 @@ f(\alpha | R) f(\beta | R).
 \end{equation}
 
 Every statistical property of the second-order random approximate set model is entailed by \cref{def:sample_fprate,def:sample_tprate}.
-Furthermore, these assumptions generally hold in practice, e.g., the Bloom filter\cite{bf} and Perfect hash filter\cite{phf} are two separate implementations of the random positive approximate set in which these assumptions hold.
+Furthermore, these assumptions generally hold in practice, e.g., the Bloom filter~\cite{bf} and Perfect hash filter~\cite{phf} are two separate implementations of the random positive approximate set in which these assumptions hold.
 
 \subsection{Abstract data type}
 \label{sec:adt}
-A data type $T$ that overloads the membership predicate $\SetContains : U \times T \mapsto \{0,1\}$ and has a value constructor $\ctor{\fprate}{\tprate} : 2^U \to T$ \emph{models} the Bernoulli set abstract data type if \cref{def:sample_fprate,def:sample_tprate} are satisfied, i.e.,
+A data type $T$ that overloads the membership predicate $\SetContains : U \times T \to \{0,1\}$ and has a value constructor $\ctor{\fprate}{\tprate} : 2^U \to T$ \emph{models} the Bernoulli set abstract data type if \cref{def:sample_fprate,def:sample_tprate} are satisfied, i.e.,
 \begin{equation}
 	\Prob{\SetContains[x][\ctor{\fprate}{\tprate}(A)] | \SetNotContains[x][A]} = \fprate
 \end{equation}
@@ -117,7 +130,7 @@ As a result, to satisfy the identity and complementation axioms required by Bool
 
 Furthermore, we may replace any of the operators in the Boolean algebra with \emph{random approximations} that model the noisy or rate-distorted channel previously described, i.e., these operators may themselves be constructors for random approximate sets, e.g., $\Set{A} \, \AT{\SetUnion}[\fprate][\tprate] \, \Set{B} \sim \AT{(\SetUnion[\Set{A}][\Set{B}])}[\tprate][\fprate]$ where $\AT{\SetUnion}[\fprate][\tprate]$ maps negatives to positives with probability $\fprate$ and maps positives to negatives with probability $\tprate$.
 
-A natural mapping is provided by the \emph{identity} function $\Fun{id} \colon \PS{\Set{X}} \mapsto \PS{\Set{X}}$, which is defined as
+A natural mapping is provided by the \emph{identity} function $\Fun{id} \colon \PS{\Set{X}} \to \PS{\Set{X}}$, which is defined as
 \begin{equation}
 \Fun{id}(\Set{A}) \coloneqq \Set{A}\,.
 \end{equation}
@@ -127,16 +140,16 @@ Then $\APFun{id}[\fprate][\tprate]$ generates sets consistent with the random ap
 If we compose random approximate sets, then we have \emph{higher-order} random approximate sets.
 \begin{theorem}
 \label{thm:composition_rates}
-	The composition of random approximate identity functions $\APFun{id}[\fprate][\tprate] \circ \APFun{id}[\fprate'][\tprate']$ generates random approximate sets with a true positive rate $\tprate \tprate' + \fnrate \fprate'$ and false positive rate $\fprate \tprate' + \tnrate \fprate'$.
+	The composition of random approximate identity functions $\APFun{id}[\fprate][\tprate] \circ \APFun{id}[\fprate'][\tprate']$ generates random approximate sets with a true positive rate $\tprate' \tprate + \fnrate' \fprate$ and false positive rate $\fprate' \tprate + \tnrate' \fprate$.
 \end{theorem}
 \begin{proof}
 	Let $x \in A$. In the inner approximation $\APFun{id}[\fprate'][\tprate']$, element $x$ tests positive with probability $\tprate'$ and negative with probability $\fnrate' = 1 - \tprate'$.
 	In the outer approximation $\APFun{id}[\fprate][\tprate]$, a positive is retained with probability $\tprate$ and a negative is promoted to positive with probability $\fprate$.
 	By the law of total probability, the composed true positive rate is
-	$\tprate' \cdot \tprate + \fnrate' \cdot \fprate = \tprate \tprate' + \fnrate \fprate'$.
+	$\tprate' \cdot \tprate + \fnrate' \cdot \fprate$.
 	Similarly, let $x \notin A$. In the inner approximation, $x$ tests positive with probability $\fprate'$ and negative with probability $\tnrate' = 1 - \fprate'$.
 	The composed false positive rate is
-	$\fprate' \cdot \tprate + \tnrate' \cdot \fprate = \fprate \tprate' + \tnrate \fprate'$.
+	$\fprate' \cdot \tprate + \tnrate' \cdot \fprate$.
 \end{proof}
 
 \begin{definition}
@@ -145,7 +158,7 @@ If we compose random approximate sets, then we have \emph{higher-order} random a
 The composition $\left(\APFun{id}[\fprate][\tprate]\right)^k$ generates $k$-fold compositions of random approximate sets where the \emph{zero-th} order random approximation is the identity, i.e., $\left(\APFun{id}\right)^0 = \Fun{id}$.
 
 The function being approximated may take other forms, like \emph{set-complementation} or \emph{set-union}, e.g.,
-let $\SetUnion \colon \PS{\Set{X}} \times \PS{\Set{X}} \mapsto \PS{\Set{X}}$ be approximated by $\APFun{\SetUnion}[\fprate][\tprate] \colon \PS{\Set{X}} \times \PS{\Set{X}} \mapsto \PS{\Set{X}}$.
+let $\SetUnion \colon \PS{\Set{X}} \times \PS{\Set{X}} \to \PS{\Set{X}}$ be approximated by $\APFun{\SetUnion}[\fprate][\tprate] \colon \PS{\Set{X}} \times \PS{\Set{X}} \to \PS{\Set{X}}$.
 Then, $\Set{A} \APFun{\SetUnion}[\fprate][\tprate] \Set{B}$ is a random approximate set of $\SetUnion[\Set{A}][\Set{B}]$ as before.
 However, $\APFun{\SetUnion}[\fprate'][\tprate'] \circ \APFun{id}[\fprate][\tprate]$ generates two-fold compositions of random approximate sets.
 
@@ -167,6 +180,56 @@ exact identity, and the inductive step applies \cref{thm:composition_rates}
 to the $k$-th order rates as inner parameters.
 \end{proof}
 
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+	width=0.7\textwidth,
+	height=0.45\textwidth,
+	xlabel={Composition depth $k$},
+	ylabel={Rate},
+	xmin=0, xmax=20,
+	ymin=0, ymax=1,
+	legend style={at={(0.98,0.5)}, anchor=east},
+	ymajorgrids, xmajorgrids,
+	major grid style={gray!30},
+	thick,
+	xtick={0,2,...,20},
+]
+\addplot[blue, solid, mark=*, mark size=1.5pt] coordinates {
+	(0,1.00000000) (1,0.90000000) (2,0.81500000)
+	(3,0.74275000) (4,0.68133750) (5,0.62913688)
+	(6,0.58476634) (7,0.54705139) (8,0.51499368)
+	(9,0.48774463) (10,0.46458294) (11,0.44489550)
+	(12,0.42816117) (13,0.41393700) (14,0.40184645)
+	(15,0.39156948) (16,0.38283406) (17,0.37540895)
+	(18,0.36909761) (19,0.36373297) (20,0.35917302)
+};
+\addlegendentry{TPR$_k$}
+\addplot[red, dashed, mark=square*, mark size=1.5pt] coordinates {
+	(0,0.00000000) (1,0.05000000) (2,0.09250000)
+	(3,0.12862500) (4,0.15933125) (5,0.18543156)
+	(6,0.20761683) (7,0.22647430) (8,0.24250316)
+	(9,0.25612768) (10,0.26770853) (11,0.27755225)
+	(12,0.28591941) (13,0.29303150) (14,0.29907678)
+	(15,0.30421526) (16,0.30858297) (17,0.31229553)
+	(18,0.31545120) (19,0.31813352) (20,0.32041349)
+};
+\addlegendentry{FPR$_k$}
+\addplot[gray, thin, dashed, forget plot, domain=0:20] {1/3};
+\node[anchor=west, gray] at (axis cs:14.5,0.37) {$\scriptstyle\frac{\fprate}{\fprate+\fnrate}$};
+\end{axis}
+\end{tikzpicture}
+\caption{True positive rate and false positive rate under $k$-fold
+composition of the approximate identity
+$\APFun{id}[\fprate][\tprate]$ with $\fprate = 0.05$ and $\tprate = 0.90$.
+Both rates converge to the stationary point
+$\fprate/(\fprate + \fnrate) = 1/3$, where $\fnrate = 1 - \tprate$.
+At high $k$, the approximation degrades toward a coin flip weighted by the
+channel's stationary distribution.}
+\label{fig:kfold_composition}
+\end{figure}
+
 In an \emph{algebra of sets} $(\PS{\Set{U}}, \SetIntersection, \SetUnion, \SetComplement, \Set{U}, \EmptySet)$, we may compose sets to form new sets.
 When these sets model \emph{random approximate sets}, then their compositions model \emph{higher-order} random approximate sets, e.g.,
 $\SetUnion[\ASet{A}[\fprate_1][\tprate_1]][\ASet{B}[\fprate_2][\tprate_2]]$
@@ -179,20 +242,12 @@ The complexity of the probabilistic model increases as the order increases.
 
 \subsection{Probability space}
 \label{sec:prob_model}
-Suppose the universal set is $U$ and we have some process that generates approximations of some objective set $A$ that is compatible with the axioms of the random approximate set model.
-
-The process generates subsets of $U$, or alternatively, the \emph{sample space} is $\Sigma = 2^U$.
-A primary objective in \emph{probability modeling} is assigning \emph{probabilities} to \emph{events}.
-Suppose we have some \emph{probability function} $\ProbFn : \Sigma \mapsto [0,1]$.
-The \emph{probability} of some event $A \in \Sigma$ is denoted by $\Prob{A}$.
-
-
-These are the \emph{elementary events} of the probability space.
-The random approximate set model given $R = Y$ is given by the \emph{probability space}
+The sample space is $\Omega = 2^U$, and the probability space is $(\Omega, \PS{\Omega}, P)$.
+By \cref{asm:element_indep}, the conditional distribution of $\tilde{A}$ given the objective set $A$ factorizes element-wise:
 \begin{equation}
-\left(\Omega = 2^U, \PS{\Omega}, P\right),
+    \Prob{\tilde{A} = S \Given A} = \prod_{x \in U} \Prob{\mathbf{1}_{\tilde{A}}(x) = \mathbf{1}_S(x) \Given \mathbf{1}_A(x)},
 \end{equation}
-where $\Omega$ is the \emph{sample space}, $\PS{\Omega}$ is the set of all events, and $P : \PS{\Omega} \mapsto [0,1]$ is the probability set function.
+where each factor equals $\tprate$ or $\fprate$ (if the element tests positive) or $\fnrate$ or $\tnrate$ (if it tests negative), depending on whether $x \in A$.
 
 \begin{remark}[Latent and observed sets]
 \label{rem:latent_observed}
@@ -204,38 +259,6 @@ then $A \subseteq \tilde{A}$: every element of $\tilde{A}$ is either a true posi
 or a false positive, so the latent set must be a subset of the observed set.
 Conversely, elements absent from $\tilde{A}$ are certainly absent from $A$.
 \end{remark}
-
-
-Consider an objective set $A$ and a random approximate set $\tilde{A}$ of $A$, and suppose we are uncertain about which elements are their respective members.
-We model the uncertainty of the elements of $A$ by the Boolean random vector $\vec{A} = \Tuple{\RV{A_1},\ldots,\RV{A_u}}$ where $\RV{A_j} = \SetIndicator{A}\left(x_{(j)}\right)$ for $j=1,\ldots,u$.
-Similarly, we model the uncertainty of the elements of the $\tilde{A}$ by $\tilde{\vec{A}}^\fprate_\tprate = \Tuple{\tilde{A}_1,\ldots,\tilde{A}_u}$.
-
-The joint probability that $\tilde{\vec{A}}^\fprate_\tprate = \vec{x}$ and $\vec{A} = \vec{y}$ is denoted by $\Prob{\tilde{\vec{A}}^\fprate_\tprate = \vec{x},\vec{A} = \vec{y}}$.
-By the axioms of probability, the joint probability may be rewritten as
-\begin{equation}
-    \Prob{\tilde{\vec{A}}^\fprate_\tprate = \vec{x},\vec{A} = \vec{y}} =
-        \Prob{\tilde{\vec{A}}^\fprate_\tprate = \vec{x} | \vec{A} = \vec{y}}
-        \Prob{\vec{A} = \vec{y}}.
-\end{equation}
-By \cref{def:sample_fprate,def:sample_tprate}, $\tilde{A}_j$ is only dependent on 
-$\RV{A_j}$ for $j=1,\ldots,u$ and thus by the axioms of probability
-\begin{equation}
-    \Prob{\tilde{\vec{A}}^\fprate_\tprate = \vec{x},\vec{A} = \vec{y}} = 
-    \Prob{\vec{A} = \vec{y}} 
-        \prod_{j=1}^{u} \Prob{\tilde{A}_j = x_j | \RV{A_j} = y_j}.
-\end{equation}
-If it is given that $\tilde{\vec{A}}^\fprate_\tprate = \vec{y}$, i.e., the elements in the 
-objective set are known, by the axioms of probability the conditional 
-probability is
-\begin{equation}
-    \Prob{\tilde{\vec{A}}^\fprate_\tprate = \vec{x} | \vec{A} = \vec{y}} = \prod_{j=1}^{u} 
-    \Prob{\tilde{A}_j = x_j | \RV{A_j} = y_j}
-\end{equation}
-where $\fprate = \Prob{\tilde{A}_j=1 | \RV{A_j}=0}$ and $\tprate = \Prob{\tilde{A}_j=1 | \RV{A_j}=1}$.
-
-
-The relative frequency of any event $\vec{x}$ in $\{0,1\}^u$ converges to $\Prob{\tilde{\vec{X}} = \vec{x} | \tilde{\vec{y}}}$ as the number of times the random approximate set of $\tilde{\vec{y}}$ is generated goes to infinity.
-
 
 
 Consider the following example.
@@ -264,6 +287,9 @@ Consider a positive approximate set such as a Bloom filter, where $\fnrate = 0$.
 If we query an element $x$ and observe $x \in \tilde{A}_+$, the result may be a false positive: $x$ might not belong to the latent set $A$.
 If we observe $x \notin \tilde{A}_+$, the result is certainly a true negative: $x \notin A$.
 Thus each membership query projects the set-level Bernoulli model onto the Boolean universe of \cref{ex:boolean_universe}, yielding a single Bernoulli Boolean whose error structure is inherited from the underlying set.
+This pattern extends beyond data structures.
+The Miller--Rabin primality test returns ``composite'' (certainly correct) or ``probably prime'' (false positive with probability at most $1/4$ per round), making its output a positive Bernoulli Boolean: the latent answer is $\{\text{prime}\}$ or $\{\text{composite}\}$, and the observed answer is a one-sided approximation with $\fnrate = 0$ and $\fprate \leq 1/4$.
+More generally, any randomized decision procedure with one-sided error produces Bernoulli Booleans.
 \end{remark}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

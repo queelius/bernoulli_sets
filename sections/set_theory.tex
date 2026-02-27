@@ -15,6 +15,11 @@ false negative rate $\fnrate_i$ for $i \in \{1,2\}$.
 By the axioms of the Bernoulli set model, the membership errors of distinct
 elements are independent.
 
+\begin{assumption}[Cross-set independence]
+\label{asm:cross_set_indep}
+The Bernoulli sets $\tilde{A}_1$ and $\tilde{A}_2$ are constructed using independent randomness: for all $x \in U$, the error indicators $\mathbf{1}_{\tilde{A}_1}(x) \neq \mathbf{1}_{A_1}(x)$ and $\mathbf{1}_{\tilde{A}_2}(x) \neq \mathbf{1}_{A_2}(x)$ are independent.
+\end{assumption}
+
 \subsection{Complement}
 \label{sec:complement}
 The complement operation exchanges the roles of positives and negatives.
@@ -79,7 +84,7 @@ $A_1$ and $A_2$.
 A false positive of the union occurs when
 $x \in \tilde{A}_1 \cup \tilde{A}_2$, i.e., when
 $x \in \tilde{A}_1$ or $x \in \tilde{A}_2$ (or both).
-By the independence of errors across the two Bernoulli sets,
+By the independence of errors across the two Bernoulli sets (\cref{asm:cross_set_indep}),
 \begin{align}
 \Prob{x \in \tilde{A}_1 \cup \tilde{A}_2 \Given x \notin A_1 \cup A_2}
 &= 1 - \Prob{x \notin \tilde{A}_1 \cup \tilde{A}_2
@@ -446,6 +451,55 @@ $\tilde{A}_1 \setminus \tilde{A}_2$
 \Cref{tab:set_ops} summarizes the error rates derived in the preceding
 subsections.
 
+\begin{remark}[Unknown partition sizes]
+\label{rem:unknown_partitions}
+The partition weights $w_1, w_2, w_3$ require knowledge of the objective set cardinalities $|A_1|$, $|A_2|$, and $|A_1 \cap A_2|$, which are typically unknown in practice.
+Three approaches handle this:
+(a) if only upper bounds on $|A_i|$ are available, \cref{sec:intervals} provides interval-valued rates;
+(b) worst-case bounds are obtained by optimizing the weights over the feasible region $w_1 + w_2 + w_3 = 1$, $w_i \geq 0$;
+(c) the cardinalities may be estimated from the approximate sets themselves, e.g., $|\tilde{A}_1 \cap \tilde{A}_2|$ is a biased estimator of $|A_1 \cap A_2|$ with computable bias from the error rates.
+\end{remark}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+	width=0.7\textwidth,
+	height=0.45\textwidth,
+	xlabel={$\fprate_2$},
+	ylabel={Union FPR $= 1 - (1-\fprate_1)(1-\fprate_2)$},
+	xmin=0, xmax=0.5,
+	ymin=0, ymax=0.6,
+	legend pos=north west,
+	ymajorgrids, xmajorgrids,
+	major grid style={gray!30},
+	thick,
+	samples=100,
+	domain=0:0.5,
+]
+\addplot[blue, solid] {1-(1-0.01)*(1-x)};
+\addlegendentry{$\fprate_1 = 0.01$}
+\addplot[red, dashed] {1-(1-0.05)*(1-x)};
+\addlegendentry{$\fprate_1 = 0.05$}
+\addplot[black!60!green, dashdotted] {1-(1-0.10)*(1-x)};
+\addlegendentry{$\fprate_1 = 0.10$}
+\addplot[orange, dotted, thick] {1-(1-0.20)*(1-x)};
+\addlegendentry{$\fprate_1 = 0.20$}
+\addplot[gray, thin, dashed, forget plot] {x + 0.01};
+\end{axis}
+\end{tikzpicture}
+\caption{Union false positive rate
+$\fprate = 1 - (1-\fprate_1)(1-\fprate_2)$ as a function of $\fprate_2$
+for several fixed values of $\fprate_1$.
+The thin dashed gray line shows the additive approximation
+$\fprate_1 + \fprate_2$ for $\fprate_1 = 0.01$;
+for small rates, the union FPR is nearly additive, but the
+product term $\fprate_1 \fprate_2$ becomes significant as rates grow.
+By De Morgan duality, the intersection FNR has the same functional form
+with $\fnrate_i$ replacing $\fprate_i$.}
+\label{fig:union_fpr}
+\end{figure}
+
 \begin{example}[Numerical illustration of union error rates]
 \label{ex:numerical_union}
 Let $|U| = 1000$, $|A_1| = 100$, $|A_2| = 80$, and $|A_1 \cap A_2| = 30$.
@@ -575,4 +629,21 @@ As $\n \to \infty$, the distribution converges in probability to $\tnrate_1 \tnr
 	Consider a sequence $\PASet{A}[\fprate_1],\ldots,\PASet{A}[\fprate_n]$ of independent positive approximate sets of the same objective set.
 	As $n \to \infty$, $\bigcap_{i=1}^{n} \PASet{A}[\fprate_i]$ converges almost surely to $\Set{A}$, since each negative element survives with probability $\prod_{i=1}^{n} \fprate_i \to 0$.
 	Dually, for negative approximate sets, $\bigcup_{i=1}^{n} \NASet{A}[\fnrate_i]$ converges almost surely to $\Set{A}$.
+\end{remark}
+
+\begin{remark}[Monoidal structure]
+\label{rem:monoid}
+The results above show that the collection of Bernoulli sets over $U$ is
+closed under union and intersection (with computable output rates).
+Since these operations inherit associativity and commutativity from the
+powerset $2^U$, Bernoulli sets form a commutative semigroup under each.
+If the degenerate-case axiom is adopted---$\Prob{\ASet{\EmptySet} =
+\EmptySet} = 1$ and, dually, $\Prob{\ASet{U} = \Set{U}} = 1$ (see
+\cref{sec:higher_order_model})---then $\EmptySet$ and $\Set{U}$ serve as
+identity elements, yielding commutative monoids under union and
+intersection respectively.
+This is useful in practice: the $n$-ary union
+$\bigcup_{i=1}^{n} \ASet{A}_i$ (as arises in approximate Boolean search,
+\cref{sec:bool_search}) is precisely the monoidal fold, requiring only an
+associative operation and an identity element.
 \end{remark}

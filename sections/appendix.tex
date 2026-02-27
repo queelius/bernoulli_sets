@@ -14,21 +14,15 @@ To say that the sequence $\alpha_1,\alpha_2,\ldots$ converges almost surely to $
 
 By \cref{cor:fpr_as_vareps}, given \emph{countably infinite} negatives, a random approximate set with a false positive rate $\fprate$ is \emph{certain} to obtain $\fprate$.
 \begin{proof}
-Hoeffding's inequality\cite{hoeffding} provides that $\FP_n$ is concentrated around its mean $n \fprate$ as given by
+Hoeffding's inequality~\cite{hoeffding} provides that $\FP_n$ is concentrated around its mean $n \fprate$ as given by
 \begin{equation}
 \Prob{(\fprate -\epsilon) n \leq \FP_n \leq (\fprate + \epsilon )n}
 \geq 1 - 2 \exp\!\left(-2\epsilon ^2 n\right),
 \end{equation}
 where $\epsilon > 0$.
-We are interested in the limiting probability
-\begin{equation}
-\begin{split}
-\lim_{n \to \infty} \Pr\!\left[(\fprate -\epsilon) n \leq \FP_n \leq (\fprate + \epsilon)n\right] =\\
-\lim_{n \to \infty} \left\{ 1 - 
-2 \exp\!\left(-2\epsilon ^{2} n\right) \right\} = 1.
-\end{split}
-\end{equation}
-As $\epsilon$ goes to 0 $\lim_{n \to \infty} \FP_n$ converges almost surely to $\fprate n$ and therefore $\lim_{n \to \infty} \FP_n / n$ converges almost surely to $\fprate$.
+For any $\epsilon > 0$, Hoeffding's inequality gives $\Prob{|\alpha_n - \fprate| > \epsilon} \leq 2\exp(-2\epsilon^2 n)$.
+Since $\sum_{n=1}^{\infty} 2\exp(-2\epsilon^2 n) < \infty$ (geometric series), the Borel--Cantelli lemma yields $\Prob{|\alpha_n - \fprate| > \epsilon \text{ i.o.}} = 0$.
+As this holds for every $\epsilon > 0$, $\alpha_n \to \fprate$ almost surely.
 \end{proof}
 
 \section{Proof of theorem~\ref{thm:approx_expected_precision}}
@@ -154,7 +148,7 @@ Substituting $\Var{\FP_n} = n \fprate(1-\fprate) = \overline{f}_p(1-\fprate) = \
 
 \section{Sampling distribution of arbitrary functions}
 \label{app:samp}
-Suppose we have a function $f : \PS{\Set{X}[1]} \times \cdots \times \PS{\Set{X}[q]} \mapsto \Set{Y}$, and we are interested in evaluating the loss when we replace one or more of the objective input sets with particular corresponding random approximate sets.
+Suppose we have a function $f : \PS{\Set{X}[1]} \times \cdots \times \PS{\Set{X}[q]} \to \Set{Y}$, and we are interested in evaluating the loss when we replace one or more of the objective input sets with particular corresponding random approximate sets.
 The result of this substitution, as previously described, is a probability distribution over $\Set{Y}$.
 
 The probability distribution of random approximate sets are precisely given; therefore, we may estimate the distribution of any function of random approximate sets by generating the random approximate sets and applying the function of interest.
@@ -283,5 +277,5 @@ A general approach to estimating $\RV{\overline{Y}_m}$ is given by generating a 
   \item $\operatorname{find}(q)$ --- Boolean algebra homomorphism mapping query $q$ to its result set
   \item $\operatorname{find}^\sigma(q)$ --- Approximate find function operating on approximate set indexes
   \item $\operatorname{encrypted\_find}(q)$ --- Encrypted find composition $\operatorname{find}^\sigma \circ H$
-  \item $\operatorname{h} \colon \BitSet^* \mapsto \BitSet^k$ --- Cryptographic hash function mapping keys to trapdoors
+  \item $\operatorname{h} \colon \BitSet^* \to \BitSet^k$ --- Cryptographic hash function mapping keys to trapdoors
 \end{itemize}

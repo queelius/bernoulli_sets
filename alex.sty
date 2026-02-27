@@ -543,12 +543,13 @@
 
 
 \newcounter{examplecounter}
+\crefname{examplecounter}{ example }{ examples }
 
-\newenvironment{example}
+\newenvironment{example}[1][]
 {
     \refstepcounter{examplecounter}%
-    \par\vspace{\baselineskip}\noindent 
-    \textbf{Example \theexamplecounter}%
+    \par\vspace{\baselineskip}\noindent
+    \textbf{Example \theexamplecounter\ifx\\#1\\\else\ (#1)\fi}%
     \begin{itshape}
     \quad
 }
@@ -639,17 +640,6 @@
 \newcommand{\negative}{n}
 \newcommand{\p}{p}
 \newcommand{\n}{n}
-
-\SetKwFunction{informed}{informed}
-\SetKwFunction{ppv}{ppv}
-\SetKwFunction{npv}{npv}
-\SetKwFunction{tpr}{tpr}
-\SetKwFunction{fpr}{fpr}
-\SetKwFunction{fnr}{fnr}
-\SetKwFunction{tnr}{tnr}
-\SetKwFunction{acc}{acc}
-\SetKwFunction{fdr}{fdr}
-\SetKwFunction{forFn}{for}
 
 \newcommand{\ERR}{\Delta}
 

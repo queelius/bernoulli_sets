@@ -25,14 +25,13 @@
 %\usepackage[intoc,english]{nomencl}
 %\makenomenclature
 \usepackage{pgfplots}
-\usepackage{tabu}
 \usepackage{tikz}
 \usepackage{tikzscale}
 \usepackage[square,numbers]{natbib}
 \bibliographystyle{plain}
 \usepackage{siunitx}
 \numberwithin{equation}{section}
-\usepackage{hyperref}
+\usepackage[hypertexnames=false]{hyperref}
 \usepackage{cleveref}
 
 \pgfplotsset{compat=newest}
@@ -40,7 +39,7 @@
 \usepackage[fancy,section]{alex}
 
 \hypersetup{
-    pdftitle={Bernoulli sets and their corresponding random binary classification measures.},
+    pdftitle={Bernoulli sets: a model for sets with random errors and corresponding random binary classification measures},
     pdfauthor={Alexander Towell},               % author
     pdfsubject={computer science},              % subject of the %document
     pdfkeywords={
@@ -60,21 +59,21 @@
 \title
 {
     Bernoulli sets: a model for sets with random errors\\
-    \large and corresponding random binary classification measures.
+    \large and corresponding random binary classification measures
 }
 \author
 {
     Alexander Towell\\
     \texttt{atowell@siue.edu}
 }
-\date{}
+\date{2026}
 
 \begin{document}
 \maketitle
 \begin{abstract}
 We introduce the \emph{Bernoulli set model}, a compositionally closed probabilistic framework for \emph{random approximate sets}---sets that approximate an objective set with independent, element-wise errors parameterized by false positive and false negative rates.
-The central property of the model is \emph{closure}: every set-theoretic operation (complement, union, intersection, difference) on Bernoulli sets yields a Bernoulli set whose error rates are computable from the operands, and this closure extends to higher-order compositions.
-From two axioms---element-wise independence and conditional independence of error rates---we derive the probability distributions of all standard binary classification measures (precision, recall, etc.), the joint entropy of error counts, and conditions under which approximate sets form commutative monoids.
+The central property of the model is \emph{rate computability}: every set-theoretic operation (complement, union, intersection, difference) on Bernoulli sets yields a (possibly higher-order) Bernoulli set whose error rates are closed-form functions of the operand rates and set cardinalities, and this computability extends to arbitrary compositions.
+From two axioms---element-wise independence and conditional independence of error rates---we derive the probability distributions of all standard binary classification measures (precision, recall, etc.), the joint entropy of error counts, and the monoidal structure of approximate sets under union and intersection.
 The framework unifies the analysis of probabilistic data structures such as Bloom filters and perfect hash filters: any implementation satisfying the Bernoulli axioms inherits the full theory as an abstract data type.
 We demonstrate this compositionality through an application to encrypted Boolean search, where showing that result sets are Bernoulli sets immediately yields all performance guarantees.
 \end{abstract}
@@ -91,7 +90,6 @@ We demonstrate this compositionality through an application to encrypted Boolean
 \input{sections/relational}
 \input{sections/uncertain_rates}
 \input{sections/entropy}
-\input{sections/algebraic_structure}
 \input{sections/bool_search}
 
 \input{sections/conclusion}

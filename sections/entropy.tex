@@ -6,7 +6,7 @@
 The Bernoulli set model assigns binomial distributions to the number of false
 positives and false negatives.
 A natural question is how much \emph{uncertainty} these error counts carry,
-as measured by Shannon entropy.
+as measured by Shannon entropy~\cite{shannonBSC}.
 In this section, we derive the joint entropy of the false positive and false
 negative counts and extend the analysis to the case in which the number of
 positives is itself uncertain.
@@ -28,8 +28,9 @@ is
 \end{equation}
 \end{theorem}
 \begin{proof}
-By \cref{asm:fpr_fnr_r_indep}, the random error counts $\FP_m$ and $\FN_m$
-are conditionally independent given $m$ positives.
+By \cref{asm:element_indep}, the random error counts $\FP_m$ and $\FN_m$
+are conditionally independent given $m$ positives (they are functions of
+indicators on disjoint element sets: negatives and positives respectively).
 Therefore the joint entropy decomposes additively:
 \begin{equation}
     \Entropy{\FP_m, \FN_m} = \Entropy{\FP_m} + \Entropy{\FN_m}.
@@ -82,7 +83,7 @@ factorizes as
       \;\Fun{p}_{\FP}(f_p \Given p, u, \fprate)
       \;\Fun{p}_{\FN}(f_n \Given p, u, \fnrate).
 \end{equation}
-By \cref{asm:fpr_fnr_r_indep}, $\FP$ and $\FN$ are conditionally independent
+By \cref{asm:element_indep}, $\FP$ and $\FN$ are conditionally independent
 given $\POS$, so the joint entropy decomposes as
 \begin{equation}
 \label{eq:joint_entropy_pos}
@@ -126,18 +127,89 @@ The \emph{information-theoretic lower-bound}\index{information-theoretic lower-b
 \end{equation}
 where $\fprate > 0$ is the false positive rate\index{false positive rate}.
 \end{proposition}
-\begin{proof}[Proof sketch]
-Each of $\p$ stored elements must be distinguished from the countably infinite negative class with false positive probability at most $\fprate$.
-By a counting argument, the number of distinguishable subsets of size $\p$ requires at least $-\p \log_2 \fprate$ bits, or $-\log_2 \fprate$ bits per element.
+\begin{proof}
+Consider a finite subset of the universe with $n$ elements, from which an
+objective set $S$ of size $\p$ is drawn.
+A representation using $B$ bits can take at most $2^B$ distinct states.
+Each state $r$ determines a \emph{positive response set}
+$Q(r) = \{x : \text{query}(x,r) = 1\}$.
+Since the data structure has no false negatives ($\tprate = 1$), we have
+$S \subseteq Q(r)$ for the state $r$ encoding $S$.
+Among the $n - \p$ negatives, each belongs to $Q(r)$ independently with
+probability at most $\fprate$, so
+$\Expect{|Q(r)|} \leq \p + \fprate(n - \p)$.
+
+By the pigeonhole principle, some state $r^*$ must encode at least
+$\binom{n}{\p} / 2^B$ distinct input sets.
+Every such set is a subset of $Q(r^*)$ of size $\p$, so
+\begin{equation}
+\binom{n}{\p} / 2^B
+    \leq \binom{|Q(r^*)|}{\p}
+    \leq \binom{\p + \fprate(n - \p)}{\p}.
+\end{equation}
+Taking logarithms and rearranging:
+\begin{equation}
+B \geq \log_2 \binom{n}{\p} - \log_2 \binom{\p + \fprate(n - \p)}{\p}.
+\end{equation}
+For fixed $\p$ as $n \to \infty$, $\binom{n}{\p} \sim n^\p / \p!$ and
+$\binom{\p + \fprate n}{\p} \sim (\fprate n)^\p / \p!$, so
+\begin{equation}
+B \geq \log_2 \frac{n^\p}{(\fprate n)^\p}
+    = \p \log_2 \frac{1}{\fprate}
+    = -\p \log_2 \fprate,
+\end{equation}
+giving $-\log_2 \fprate$ bits per element.
 \end{proof}
 \begin{remark}
-The general case $0 < \tprate < 1$ remains open; the scaling argument $-\tprate \log_2 \fprate$ is plausible but is not a valid information-theoretic lower bound, since the encoding problem changes qualitatively when elements are randomly dropped.
+\label{rem:general_lower_bound}
+The general case $0 < \tprate < 1$ remains open.
+When false negatives occur, $S \not\subseteq Q(r)$ and the pigeonhole step
+above fails: valid input sets are no longer constrained to be subsets of the
+positive response set.
+The heuristic scaling $-\tprate \log_2 \fprate$ (retaining $\p \tprate$
+elements on average, each requiring $-\log_2 \fprate$ bits) is plausible
+but is not a valid information-theoretic lower bound, since the encoding
+problem changes qualitatively when elements are randomly dropped.
 \end{remark}
 
-A well-known implementation of countably infinite \emph{positive approximate set} is the Bloom filter\cite{bf} which has an expected space complexity given
+A well-known implementation of countably infinite \emph{positive approximate set} is the Bloom filter~\cite{bf} which has an expected space complexity given
 by
 \begin{equation}
     -\frac{1}{\ln 2} \log_2 \fprate \; \si{bits \per element},
 \end{equation}
 thus the absolute efficiency of the Bloom filter is $\ln 2 \approx 0.69$.
-A practical implementation of the \emph{positive random approximate set} is given by the \emph{Perfect Hash Filter}\cite{phf}, which compares favorably to the Bloom filter in many circumstances.\footnote{The \emph{Singular Hash Set}\cite{shs} is an example of a data structure that obtains optimality using \emph{brute-force} search, so it is not practical for even relatively small objective sets. However, its primary purpose is analytic tractability.}
+A practical implementation of the \emph{positive random approximate set} is given by the \emph{Perfect Hash Filter}~\cite{phf}, which compares favorably to the Bloom filter in many circumstances.\footnote{The \emph{Singular Hash Set}~\cite{shs} is an example of a data structure that obtains optimality using \emph{brute-force} search, so it is not practical for even relatively small objective sets. However, its primary purpose is analytic tractability.}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+	width=0.7\textwidth,
+	height=0.45\textwidth,
+	xlabel={False positive rate $\fprate$},
+	ylabel={Bits per element},
+	xmin=0.001, xmax=1,
+	ymin=0, ymax=15,
+	xmode=log,
+	legend pos=north east,
+	ymajorgrids, xmajorgrids,
+	major grid style={gray!30},
+	thick,
+	samples=200,
+	domain=0.001:1,
+]
+\addplot[blue, solid] {-ln(x)/ln(2)};
+\addlegendentry{Optimal: $-\log_2 \fprate$}
+\addplot[red, dashed] {-ln(x)/ln(2)/ln(2)};
+\addlegendentry{Bloom filter: $-\frac{1}{\ln 2}\log_2 \fprate$}
+\end{axis}
+\end{tikzpicture}
+\caption{Space complexity of positive approximate sets as a function of
+the false positive rate $\fprate$.
+The solid curve is the information-theoretic lower bound
+$-\log_2 \fprate$ bits per element (\cref{pst:approx_l_b}).
+The dashed curve is the Bloom filter cost
+$-(1/\ln 2)\log_2 \fprate$; the gap reflects the Bloom filter's
+$\ln 2 \approx 69\%$ efficiency.}
+\label{fig:space_lower_bound}
+\end{figure}
