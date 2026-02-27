@@ -128,9 +128,9 @@ Multiplying the left column matrix by the right column matrix in $A$ results in
 \end{equation}
 As a linear operator, the expectation of $A$ is equivalent to
 \begin{equation}
-    \Expect{A} = -\overline{f} \Expect{\TP_p - \overline{t}}^2 + \left(\overline{t}-\overline{f}\right)\Expect{\left(\FP_n - \overline{f}\right)\left(\TP_p - \overline{t}\right)} + \overline{t}\Expect{\FP_n - \overline{f}}^2
+    \Expect{A} = -\overline{f} \Expect{(\TP_p - \overline{t})^2} + \left(\overline{t}-\overline{f}\right)\Expect{\left(\FP_n - \overline{f}\right)\left(\TP_p - \overline{t}\right)} + \overline{t}\Expect{(\FP_n - \overline{f})^2}
 \end{equation}
-By definition, $\Expect{\TP_p - \overline{t}}^2$ is the variance of $\TP_p$, $\Expect{\FP_n - \overline{f}}^2$ is the variance of $\FP_n$, and $\Expect{\left(\FP_n - \overline{f}\right)\left(\TP_p - \overline{t}\right)}$ is the covariance of $\TP_p$ and $\FP_n$, which is $0$ since they are independent.
+By definition, $\Expect{(\TP_p - \overline{t})^2}$ is the variance of $\TP_p$, $\Expect{(\FP_n - \overline{f})^2}$ is the variance of $\FP_n$, and $\Expect{\left(\FP_n - \overline{f}\right)\left(\TP_p - \overline{t}\right)}$ is the covariance of $\TP_p$ and $\FP_n$, which is $0$ since they are independent.
 Making these substitutions results in
 \begin{equation}
     \Expect{A} = \overline{t} \Var{\FP_n} - \overline{f} \Var{\TP_p}

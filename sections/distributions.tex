@@ -65,7 +65,7 @@ By \cref{thm:fpbinom}, given that there are $n$ negatives, the number of false p
 Therefore, the false positive rate, as a function of $\FP_n$, is the random variable $\frac{\FP_n}{n}$.
 The \emph{expected} false positive rate is
 \begin{equation}
-    E\{\frac{\FP_n}{n}\} = \frac{1}{n}E\{\FP_n\} = \fprate
+    \Expect{\frac{\FP_n}{n}} = \frac{1}{n}\Expect{\FP_n} = \fprate
 \end{equation}
 and its variance is
 \begin{equation}
@@ -74,7 +74,7 @@ and its variance is
 Finally, $\alpha_n = \FP_n / n$ is a \emph{scaled} transformation of the binomial distribution.
 Thus, since $\FP_n = n \alpha_n$,
 \begin{equation}
-	f_{\alpha_n}(\fprateob_n | \fprate) = f_{\FP_n}(n \fprateob).
+	p_{\alpha_n}(\fprateob_n | \fprate) = p_{\FP_n}(n \fprateob).
 \end{equation}
 \end{proof}
 The following corollary immediately follows.
@@ -432,7 +432,7 @@ Let $\lambda = \p / (\p + \n)$ denote the \emph{base rate} (proportion of positi
 	Noting that $\n/(\p+\n) = 1 - \p/(\p+\n)$ and letting $\lambda = \p/(\p + 
 	\n)$,
 	\begin{equation}
-	E\{\ACC_{\p + \n}\} = \lambda (1 - \fnrate) + (1 - \lambda) (1 - 
+	\Expect{\ACC_{\p + \n}} = \lambda (1 - \fnrate) + (1 - \lambda) (1 -
 	\fprate).
 	\end{equation}
 	The variance
@@ -485,7 +485,7 @@ In the case of the random approximate set model, $J$ is a random variable
 \end{equation}
 which has an \emph{expectation}
 \begin{equation}
-E\{\RV{J}\} = \tprate - \fprate.
+\Expect{\RV{J}} = \tprate - \fprate.
 \end{equation}
 
 \begin{table}
