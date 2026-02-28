@@ -15,40 +15,24 @@ We denote by $\Interval{\underbar{x},\bar{x}}$ an interval with a lower-bound $\
 A confidence interval may be specified in interval notation.
 Here, however, we consider an algebra for interval arithmetic and put it to use quantifying our ignorance about the distribution of parameters after, for instance, a union operation.
 
-The performance measures summarized by \cref{tbl:perf_sum} depend upon the false positive rate $\fprate$, false negative rate $\fnrate$, and proportion of positives $\lambda$ being \emph{known}.
-Any parameters that are not known with certainty may be replaced in the above table by intervals that (are assumed to) contain the expected value.
-As a consequence, the performance measure will also be an interval.
+The error-rate formulas of \cref{sec:set_theory} depend upon the false positive and false negative rates being \emph{known}.
+Any parameters that are not known with certainty may be replaced by intervals that (are assumed to) contain the true value.
+As a consequence, the output error rate will also be an interval.
 
-\emph{Maximum} uncertainty is when the parameter value is in the interval $[0,1]$, e.g., $[\lambda] = [0,1]$, and \emph{minimum} uncertainty is when the parameter is some value in the degenerate interval $[x,x]$, e.g., $[\fprate] = [.2,.2]$. The more certain--the smaller the width of the intervals--the more certain the performance measure.
+\emph{Maximum} uncertainty is when the parameter value is in the interval $[0,1]$, e.g., $[\fprate] = [0,1]$, and \emph{minimum} uncertainty is when the parameter is some value in the degenerate interval $[x,x]$, e.g., $[\fprate] = [.2,.2]$. The more certain---the smaller the width of the intervals---the more certain the output rate.
 
 When using interval arithmetic, the \emph{dependency problem} can lead to overly pessimistic bounds.
-In our case, the formulae are simple enough to ensure dependencies are satisfied. We show the results of an uncertain proportion of positives $[\lambda]$ for the \emph{accuracy} measure in the following example.
+In our case, the formulae are simple enough to ensure dependencies are satisfied. The following example illustrates the approach for the union false positive rate.
 
 \begin{example}
-	Suppose we wish to determine the expected accuracy given that the proportion of positives $\lambda$ is known to be some value in the interval $[\lambda]$, and that the false positive and false negative rates lie in $[\fprate]$ and $[\fnrate]$ respectively.
-	The accuracy formula $\acc = \lambda(1-\fnrate) + (1-\lambda)(1-\fprate)$ may be rewritten as
+	Suppose two approximate sets have false positive rates known only to lie in $[\fprate_1]$ and $[\fprate_2]$ respectively.
+	The union FPR formula (\cref{thm:union_fprate}) is $\fprate = 1 - (1-\fprate_1)(1-\fprate_2)$, which is monotonically increasing in both $\fprate_1$ and $\fprate_2$.
+	Evaluating at the endpoints yields guaranteed bounds:
 	\begin{equation}
-		\acc = (1-\fprate) + \lambda(\fprate - \fnrate).
+		[\fprate] = \bigl[1 - (1 - \underline{\fprate}_1)(1 - \underline{\fprate}_2),\;
+		             1 - (1 - \overline{\fprate}_1)(1 - \overline{\fprate}_2)\bigr].
 	\end{equation}
-	Since the accuracy is multilinear in $(\fprate, \fnrate, \lambda)$, its extremes over the box $[\fprate] \times [\fnrate] \times [\lambda]$ are attained at vertices.
-	The formula is decreasing in $\fprate$ and $\fnrate$, but its monotonicity in $\lambda$ depends on the sign of $\fprate - \fnrate$:
-	\begin{itemize}
-		\item If $\fprate \geq \fnrate$ (the common case, e.g., Bloom filters), accuracy increases in $\lambda$, so:
-		\begin{equation}
-			\acc \in \bigl[
-			(1-\overline{\fprate}) + \underline{\lambda}(\overline{\fprate} - \overline{\fnrate}),\;
-			(1-\underline{\fprate}) + \overline{\lambda}(\underline{\fprate} - \underline{\fnrate})
-			\bigr].
-		\end{equation}
-		\item If $\fprate < \fnrate$, accuracy decreases in $\lambda$, so the $\lambda$ endpoints are reversed:
-		\begin{equation}
-			\acc \in \bigl[
-			(1-\overline{\fprate}) + \overline{\lambda}(\overline{\fprate} - \overline{\fnrate}),\;
-			(1-\underline{\fprate}) + \underline{\lambda}(\underline{\fprate} - \underline{\fnrate})
-			\bigr].
-		\end{equation}
-	\end{itemize}
-	In practice, guaranteed bounds are obtained by evaluating the accuracy at all $2^3 = 8$ vertices and taking the minimum and maximum.
+	For instance, if $[\fprate_1] = [0.01, 0.05]$ and $[\fprate_2] = [0.02, 0.08]$, then $[\fprate] = [0.0298, 0.126]$.
 \end{example}
 
 We may not be interested in the \emph{expected} value, but the smallest set of values such that with probability $1-\gamma$ the true rate
@@ -98,12 +82,4 @@ Since the union FNR (\cref{eq:union_fnr}) increases in $\fnrate_1, \fnrate_2$ an
 Intersection and set difference follow analogously: the intersection FNR has the same form as the union FPR (by the De Morgan duality noted in \cref{sec:set_ops_summary}), and the set difference is handled by substituting complemented intervals per \cref{thm:uncertain_rates_comp_set}.
 \end{remark}
 
-\begin{example}[Interval PPV]
-Given interval-valued rates, the positive predictive value inherits interval bounds.
-Since $\ppv \approx \overline{t}/(\overline{t} + \overline{f})$ for large sets (see \cref{thm:approx_expected_precision}), substituting $\overline{t} = p\,\tprate$ and $\overline{f} = n\,\fprate$ and evaluating at the extremes of $[\fprate]$ and $[\tprate]$ yields
-\begin{equation}
-[\ppv] \approx \biggl[\frac{p\,\underline{\tprate}}{p\,\underline{\tprate} + n\,\overline{\fprate}},\; \frac{p\,\overline{\tprate}}{p\,\overline{\tprate} + n\,\underline{\fprate}}\biggr],
-\end{equation}
-providing guaranteed bounds on the expected precision under uncertain rates.
-\end{example}
 

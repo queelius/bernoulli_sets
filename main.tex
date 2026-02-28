@@ -38,7 +38,7 @@
 \usepackage[fancy,section]{alex}
 
 \hypersetup{
-    pdftitle={Bernoulli sets: a model for sets with random errors and corresponding random binary classification measures},
+    pdftitle={Bernoulli sets: a model for random approximate sets},
     pdfauthor={Alexander Towell},               % author
     pdfsubject={computer science},              % subject of the %document
     pdfkeywords={
@@ -57,8 +57,7 @@
 
 \title
 {
-    Bernoulli sets: a model for sets with random errors\\
-    \large and corresponding random binary classification measures
+    Bernoulli sets: a model for random approximate sets
 }
 \author
 {
@@ -70,11 +69,11 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-We introduce the \emph{Bernoulli set model}, a compositionally closed probabilistic framework for \emph{random approximate sets}---sets that approximate an objective set with independent, element-wise errors parameterized by false positive and false negative rates.
-The central property of the model is \emph{rate computability}: every set-theoretic operation (complement, union, intersection, difference) on Bernoulli sets yields a (possibly higher-order) Bernoulli set whose error rates are closed-form functions of the operand rates and set cardinalities, and this computability extends to arbitrary compositions.
-From two axioms---element-wise independence and conditional independence of error rates---we derive the probability distributions of all standard binary classification measures (precision, recall, etc.), the joint entropy of error counts, and the monoidal structure of approximate sets under union and intersection.
-The framework unifies the analysis of probabilistic data structures such as Bloom filters and perfect hash filters: any implementation satisfying the Bernoulli axioms inherits the full theory as an abstract data type.
-An interval arithmetic extension propagates uncertain rates through set operations, yielding guaranteed bounds on output error rates.
+We introduce the \emph{Bernoulli set model}, a probabilistic framework for \emph{random approximate sets}---sets that approximate an objective set with independent, element-wise errors parameterized by false positive and false negative rates.
+From two axioms---element-wise independence and conditional independence of block error rates---we derive the binomial distributions of error counts (false positives, false negatives, true positives, true negatives), their asymptotic normal limits, and confidence intervals for the realized error rates.
+The model supports higher-order compositions: the $k$-fold composition of approximate identity functions yields a Bernoulli set whose rates are given by the product of binary channel transition matrices.
+The framework is formulated as an abstract data type: any implementation satisfying the Bernoulli axioms---including Bloom filters, perfect hash filters, and their compositions---inherits the full theory automatically.
+Companion papers develop the compositional set-theoretic algebra, classification measures, and entropy of the model.
 \end{abstract}
 
 \microtypesetup{protrusion=false}
@@ -85,11 +84,6 @@ An interval arithmetic extension propagates uncertain rates through set operatio
 \input{sections/algebra_of_sets}
 \input{sections/bernoulli_model}
 \input{sections/distributions}
-\input{sections/set_theory}
-\input{sections/relational}
-\input{sections/uncertain_rates}
-\input{sections/entropy}
-
 
 \input{sections/conclusion}
 

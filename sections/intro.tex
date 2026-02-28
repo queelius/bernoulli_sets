@@ -15,14 +15,11 @@ Without such a framework, each new combination of approximate sets requires a be
 
 \paragraph{Contribution.}
 We introduce the \emph{Bernoulli set model}, a probabilistic framework for \emph{random approximate sets} built on two axioms: element-wise independence of errors and conditional independence of block error rates.
-The central result is \emph{compositional rate computability}: every set-theoretic operation on Bernoulli sets produces a (possibly higher-order) Bernoulli set whose error rates are closed-form functions of the input rates and set cardinalities.
-This computability extends to higher-order compositions via a recursive application of the composition theorem; in particular, a second-order operation on second-order inputs yields a higher-order model whose rates are nonetheless computable.
 From these axioms we derive:
 \begin{enumerate}[nosep]
-    \item the probability distributions of all standard binary classification measures (precision, recall, accuracy, etc.),
-    \item closed-form error rates for complement, union, intersection, and set difference, together with the monoidal structure they induce,
-    \item the joint entropy of error counts, and
-    \item an interval arithmetic extension that propagates uncertain rates through set operations.
+    \item the binomial distributions of error counts (false positives, false negatives, true positives, true negatives) and their asymptotic normal limits,
+    \item the higher-order composition theorem: the $k$-fold composition of approximate identity functions yields a Bernoulli set whose rates are given by the product of binary channel transition matrices, and
+    \item confidence intervals for the realized false positive and true positive rates.
 \end{enumerate}
 The framework is formulated as an abstract data type: any implementation whose membership queries satisfy the Bernoulli axioms---including Bloom filters, perfect hash filters, and their compositions---inherits the full theory automatically.
 
@@ -33,14 +30,14 @@ Bose et al.~\cite{boseBloom} give tight bounds on the Bloom filter false positiv
 Related probabilistic summaries such as the count-min sketch~\cite{countMinSketch} trade exact answers for space efficiency in the streaming setting.
 However, analyses typically treat each structure in isolation, deriving error rates for a single filter rather than for compositions of filters.
 General probabilistic methods for randomized algorithms~\cite{mitzenmacherUpfal} provide the analytical toolkit (concentration inequalities, entropy bounds) but do not address the compositional structure of approximate sets.
-The interval arithmetic approach to uncertain parameters~\cite{basicinterval,mooreInterval} addresses a related but distinct problem: propagating uncertainty through arithmetic expressions rather than set-theoretic ones.
-Our framework complements these lines of work by providing an algebraic layer that sits above any particular implementation.
+Our framework complements these lines of work by providing an algebraic layer that sits above any particular implementation; the interval arithmetic extension for uncertain rate parameters is developed in~\cite{bernoulliComposition}.
+
+\paragraph{Companion papers.}
+The set-theoretic composition of Bernoulli sets---closed-form error rates for complement, union, intersection, and set difference, monoidal structure, relational predicates, and interval arithmetic---is developed in a companion paper~\cite{bernoulliComposition}.
+The probability distributions of binary classification measures (precision, recall, accuracy, etc.) induced by the Bernoulli model are derived in~\cite{bernoulliMeasures}.
+The joint entropy of error counts and the information-theoretic space complexity of approximate sets are developed in~\cite{bernoulliEntropy}.
 
 \paragraph{Organization.}
 \Cref{sec:setalgebra} reviews the algebra of sets.
 \Cref{sec:bernoulli_model} introduces the Bernoulli set model and its axioms, including the higher-order composition theorem.
-\Cref{sec:characteristics} derives the probability distributions of fundamental binary classification measures.
-\Cref{sec:set_theory} derives error rates for all four set-theoretic operations and establishes closure properties.
-\Cref{sec:relational} treats relational predicates (subset, equality) on Bernoulli sets.
-\Cref{sec:intervals} develops interval arithmetic for uncertain rate parameters.
-\Cref{sec:entropy} derives the joint entropy of error counts and establishes space complexity bounds.
+\Cref{sec:characteristics} derives the binomial distributions of error counts and their asymptotic normal limits.
