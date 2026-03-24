@@ -10,8 +10,8 @@ However, practical systems rarely use a single approximate set in isolation.
 Encrypted search indexes, database query planners, and distributed systems routinely compose approximate sets through union, intersection, complement, and difference, and the resulting error behavior has traditionally been analyzed on a case-by-case basis.
 
 \paragraph{The gap.}
-The existing literature lacks a \emph{compositional algebra} for approximate sets: a framework in which the error rates of any set-theoretic expression are mechanically computable from the error rates of its operands.
-Without such a framework, each new combination of approximate sets requires a bespoke analysis, and higher-order compositions---approximate sets of approximate sets---remain largely uncharacterized.
+The existing literature lacks a \emph{foundational probabilistic model} for approximate sets: a framework that axiomatizes the error structure, derives the distributions of error counts from first principles, and provides an abstract data type that any implementation can model.
+Without such a foundation, each data structure is analyzed in isolation, higher-order compositions (approximate sets of approximate sets) remain uncharacterized, and no unified theory connects the per-element error model to the set-level distributional behaviour.
 
 \paragraph{Contribution.}
 We introduce the \emph{Bernoulli set model}, a probabilistic framework for \emph{random approximate sets} built on two axioms: element-wise independence of errors and conditional independence of block error rates.

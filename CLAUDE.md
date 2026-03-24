@@ -44,6 +44,10 @@ pdflatex main.tex && bibtex main && pdflatex main.tex && pdflatex main.tex
 
 1. **Set algebra** → 2. **Bernoulli model** (FPR/FNR axioms, model order = block count) → 3. **Higher-order models and k-fold composition** → 4. **Error count distributions** (binomial FP/FN/TP/TN, CLT, confidence intervals)
 
+## Key Conceptual Distinction
+
+**Model order vs. parameter count**: Model order counts partition blocks (how many distinct error regimes exist). A general $n$-th order channel on $k$ output symbols has $n(k-1)$ free parameters. For a single Boolean membership test ($k=2$), this gives $n$ parameters. But for $m$ joint tests ($k=2^m$), a general model has $n(2^m-1)$ parameters. Axiom 1 (element-wise independence) forces a Kronecker product factorization, reducing parameters from $n(2^m-1)$ to at most $2m$. Example: union of two second-order sets is fourth-order but has 4 parameters, not 12. These concepts are orthogonal: order constrains which confusion matrix rows are identical, independence constrains the internal structure of each row. See Remark 3.4 (parametric parsimony) in `sections/bernoulli_model.tex`.
+
 ## Scope Boundaries
 
 This paper covers the **foundational model**. Content that belongs elsewhere:

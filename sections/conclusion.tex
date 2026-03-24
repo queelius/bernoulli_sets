@@ -5,10 +5,9 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-We have developed the Bernoulli set model, a probabilistic framework for random approximate sets parameterized by false positive and false negative rates.
-From two axioms---element-wise independence and conditional independence of block error rates---we derived the binomial distributions of error counts (false positives, false negatives, true positives, true negatives), their asymptotic normal limits, and confidence intervals for the realized error rates.
-The higher-order composition theorem shows that $k$-fold compositions of approximate identity functions yield Bernoulli sets whose rates are given by products of binary channel transition matrices.
-The framework is formulated as an abstract data type, so any implementation satisfying the Bernoulli axioms---Bloom filters, perfect hash filters, or their compositions---inherits the full theory.
+A central finding of this work is that two axioms suffice for the full distributional theory of random approximate sets: element-wise independence and conditional independence of block error rates together imply binomial error counts, normal limits, and confidence intervals, with no additional assumptions required.
+The Kronecker factorization of the joint confusion matrix captures this parametric parsimony; the entire probabilistic structure follows from the false positive and false negative rates alone.
+By formulating the model as an abstract data type, we ensure that any conforming implementation (Bloom filters, perfect hash filters, or their compositions) inherits every result automatically, decoupling the theory from any particular construction.
 
 \paragraph{Practical implications.}
 The abstract data type formulation means that the results of this paper apply automatically to any implementation whose membership queries satisfy element-wise independence.
@@ -29,6 +28,5 @@ The contribution of the present work is the probabilistic \emph{model}---the axi
 
 \paragraph{Further extensions.}
 The algebraic structure developed here extends to richer mathematical objects.
-The algebra of approximate maps---functions $X \to Y$ with Bernoulli errors---is treated in a companion paper on approximate maps, which derives composition rules for approximate Boolean functions and function spaces.
-Approximate relations, including the relational algebra operators (join, project, select), are developed in a companion paper on approximate relations.
-A type-theoretic generalization---treating approximate Booleans, maps, and relations as instances of a single algebraic framework over sum, product, and function types---is developed in companion work on approximate algebraic data types.
+The algebra of approximate maps (functions $X \to Y$ with Bernoulli errors) is treated in a companion paper~\cite{bernoulliMaps}, which derives composition rules for approximate Boolean functions and function spaces, and shows that the entropy map is the information-theoretically optimal construction.
+A type-theoretic generalization, treating approximate Booleans, maps, and relations as instances of a single algebraic framework over sum, product, and function types, is developed in companion work on approximate algebraic data types.

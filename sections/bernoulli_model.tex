@@ -13,11 +13,11 @@ Theoretically, a process that generates approximations could exhibit correlation
 \label{asm:element_indep}
 For all distinct $x, y \in U$, the error events at $x$ and $y$ are mutually independent:
 \begin{equation}
-P(\mathbf{1}_{\tilde{A}}(x) \neq \mathbf{1}_{A}(x) \mid \mathbf{1}_{\tilde{A}}(y) \neq \mathbf{1}_{A}(y)) =
-	P(\mathbf{1}_{\tilde{A}}(x) \neq \mathbf{1}_{A}(x)).
+\Prob{\mathbf{1}_{\tilde{A}}(x) \neq \mathbf{1}_{A}(x)}[\mathbf{1}_{\tilde{A}}(y) \neq \mathbf{1}_{A}(y)] =
+	\Prob{\mathbf{1}_{\tilde{A}}(x) \neq \mathbf{1}_{A}(x)}.
 \end{equation}
 More generally, the family $\{\mathbf{1}_{\tilde{A}}(x) : x \in U\}$ is mutually independent given the objective set $A$ and the error rates.
-Furthermore, within each partition block $B_i$ (\cref{def:model_order}), the error indicators $\{\mathbf{1}_{\tilde{A}}(x) : x \in B_i\}$ are identically distributed.
+Furthermore, within each partition block $B_i$ (as formalized in \cref{def:model_order} below), the error indicators $\{\mathbf{1}_{\tilde{A}}(x) : x \in B_i\}$ are identically distributed.
 \end{axiom}
 
 The complexity in the Bernoulli set model stems from the fact that different subsets of the universal set may exhibit different error rates.
@@ -41,13 +41,24 @@ For instance, in the second-order model, the random false positive rate $\alpha$
 \label{rem:bsc}
 At the per-element level, the Bernoulli set model is a collection of independent binary channels~\cite{shannonBSC}; equivalently, each element undergoes Warner's randomized response~\cite{warner1965}. For each $x \in U$, the indicator $\mathbf{1}_{\tilde{A}}(x)$ is the output of a binary channel with crossover probability $\fprate$ (if $x \notin A$) or $\fnrate$ (if $x \in A$).
 When $\fprate = \fnrate$ (the first-order model), this reduces to a binary \emph{symmetric} channel (BSC); in general, the channel is asymmetric.
-The novelty of the present framework is not the per-element channel model, which is classical, but the \emph{set-level} compositional algebra: the derivation of error rates for union, intersection, complement, and their higher-order compositions over collections of such channels.
+The novelty of the present framework is not the per-element channel model, which is classical, but the axiomatic \emph{set-level} model: the derivation of error-count distributions, higher-order compositions via channel matrix products, and the abstract data type formulation that any conforming implementation inherits automatically.
+The compositional algebra of set operations (error rates for union, intersection, complement) is developed in the companion paper~\cite{bernoulliComposition}.
 \end{remark}
 
 \begin{remark}[Axiom economy]
 \label{rem:axiom_economy}
 Most results in this paper---the distributions of error counts (\cref{sec:characteristics})---and in the companion paper on composition~\cite{bernoulliComposition}---the set-operation error rates, monoidal structure, and relational probabilities---follow from \cref{asm:element_indep} alone.
 \Cref{asm:fpr_fnr_r_indep} is needed only when the objective set $R$ is itself uncertain, in which case it permits the factorization of the joint distribution of $\tilde{R}$ and $R$ (\cref{sec:prob_model}) and the entropy decomposition developed in a companion paper~\cite{bernoulliEntropy}.
+\end{remark}
+
+\begin{remark}[Parametric parsimony]
+\label{rem:parametric_parsimony}
+A general channel on $k$ output symbols with $n$ partition blocks has $n(k-1)$ free parameters: each of the $n$ distinct rows of the transition matrix has $k - 1$ free entries.
+For a single membership test ($k = 2$), an $n$-th order model therefore has $n$ parameters---one response probability per block.
+When $m$ \emph{independent} membership tests are considered jointly, the observed output lies in an alphabet of size $2^m$, and a general $n$-th order channel would require $n(2^m - 1)$ parameters.
+\Cref{asm:element_indep} forces the joint transition matrix to factor as a Kronecker product of per-test $2 \times 2$ channels, so each partition block contributes one parameter per test rather than $2^m - 1$.
+For example, the union of two second-order Bernoulli sets induces a fourth-order model on $4$ observed symbols~\cite{bernoulliComposition}; a general fourth-order channel would have $4 \times 3 = 12$ free parameters, but the Kronecker factorization reduces this to $4$ (one response rate per block per set).
+This is not merely a mathematical convenience: it reflects the physical independence of membership queries in practical implementations such as Bloom filters and perfect hash filters, in which the query outcomes for distinct elements are determined by independent hash evaluations.
 \end{remark}
 
 There are two natural \emph{statistics} of the Bernoulli set model, the random false positive and true positive rates conditioned on $R = A$.
@@ -61,6 +72,13 @@ and
 \label{def:sample_tprate}
 	\beta = \frac{1}{|A|} \sum_{x \in A} \mathbf{1}_{\tilde{A}}(x).
 \end{equation}
+\begin{remark}[Notational convention for $\alpha$ and $\beta$]
+\label{rem:alpha_beta_convention}
+The statistic $\alpha$ is the sample \emph{false positive rate} (an error rate on negatives), while $\beta$ is the sample \emph{true positive rate} (a response rate on positives).
+This asymmetry is deliberate: in the general $n$-th order model, each block has a single \emph{response rate} $\alpha_i$ (\cref{def:model_order}), and the second-order specialization sets $\alpha_1 = \beta$ and $\alpha_2 = \alpha$.
+When the false negative rate is needed as a statistic, we write $\beta_p = \FN_p / p = 1 - \beta$ (conditioned on $p$ positives; see \cref{thm:fnr}), paralleling the true negative rate $\mathrm{TNR}_n = 1 - \alpha_n$.
+The subscripted forms $\alpha_n$ and $\beta_p$ always denote error rates (FPR and FNR respectively), while the bare $\beta$ denotes the complementary TPR.
+\end{remark}
 \begin{proposition}
 \label{prop:element_rates}
 By \cref{asm:element_indep}, for any single element $x \notin A$,
@@ -90,13 +108,15 @@ Special cases with only one type of error specified are written $\tilde{X}[\fpra
 Random \emph{positive} and \emph{negative} approximate sets are special cases respectively given by the following definitions.
 \begin{definition}
 \label{def:pos_approx_set}
-A random approximate set $\tilde{A}[0][+]$ is a random \emph{positive} approximate set denoted by $\tilde{A}_+$.
+A random approximate set with $\fnrate = 0$ (equivalently, $\tprate = 1$) is a random \emph{positive} approximate set denoted by $\tilde{A}_+$.
+It is parameterized by its false positive rate alone: $\tilde{A}_+^\fprate$.
 \end{definition}
 \begin{definition}
 \label{def:neg_approx_set}
-A random approximate set $\tilde{A}[-][0]$ is a random \emph{negative} approximate set denoted by $\tilde{A}_-$.
+A random approximate set with $\fprate = 0$ (equivalently, $\tnrate = 1$) is a random \emph{negative} approximate set denoted by $\tilde{A}_-$.
+It is parameterized by its false negative rate alone: $\tilde{A}_-^\fnrate$.
 \end{definition}
-By these definitions, every realization of $\tilde{A}_+$ and $\tilde{A}_-$ are respectively \emph{supersets} or \emph{subsets} of $A$.
+By these definitions, every realization of $\tilde{A}_+$ is a \emph{superset} of $A$ (no elements of $A$ are missed) and every realization of $\tilde{A}_-$ is a \emph{subset} of $A$ (no elements outside $A$ are included).
 The complement of a random positive (negative) approximate set is a random negative (positive) approximate set.
 
 By \cref{asm:fpr_fnr_r_indep} and by the axioms of probability,
@@ -297,6 +317,7 @@ Thus each membership query projects the set-level Bernoulli model onto the Boole
 This pattern extends beyond data structures.
 The Miller--Rabin primality test returns ``composite'' (certainly correct) or ``probably prime'' (false positive with probability at most $1/4$ per round), making its output a positive Bernoulli Boolean: the latent answer is $\{\text{prime}\}$ or $\{\text{composite}\}$, and the observed answer is a one-sided approximation with $\fnrate = 0$ and $\fprate \leq 1/4$.
 More generally, any randomized decision procedure with one-sided error produces Bernoulli Booleans.
+A companion paper on approximate maps~\cite{bernoulliMaps} develops this observation fully: every Bernoulli approximation is an instance of approximating a latent function $f' \colon X \to Y$ with per-input independent errors, and the Bernoulli Boolean is the atomic case from which all others are built by Kronecker products across the input domain.
 \end{remark}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
